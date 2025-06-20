@@ -1,3 +1,6 @@
-pnpm instead of npm
+# Vacay Vision - Server Side Rendered Web App
 
+### Helpful dev commands
+
+pnpm instead of npm
 pnpm run dev
