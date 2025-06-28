@@ -1,6 +1,16 @@
 import { fileURLToPath } from 'url';
 import path from 'path';
 import express from 'express';
+import session from 'express-session';
+import pgSession from 'connect-pg-simple';
+import { addGlobalData } from './src/middleware/globals.js';
+import indexRoutes from './src/routes/index.js';
+import authRoutes from './src/routes/auth.js';
+import dashboardRoutes from './src/routes/dashboard.js';
+import communityRoutes from './src/routes/community.js';
+import { setupDatabase, testConnection } from './src/models/setup.js';
+import db from './src/models/db.js';
+import flashMessages from './src/middleware/flash.js';
 
 // Setup
 const __filename = fileURLToPath(import.meta.url);
@@ -14,34 +24,52 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'src/views'));
 
 // Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(addGlobalData);
+const PostgresStore = pgSession(session);
+app.use(session({
+    store: new PostgresStore({
+        pool: db,// postgres database connection
+        tableName: 'sessions',
+        createTableIfMissing: true
+    }),
+    secret: process.env.SESSION_SECRET || "default-secret-change-in-production",
+    resave: false,
+    saveUninitialized: false,
+    name: "sessionId",
+    cookie: {
+        secure: false, // Set to true in production with HTTPS
+        httpOnly: true, // Prevents client-side access to the cookie
+        maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days in milliseconds
+    }
+}));
+app.use(flashMessages);
 
 
 // Routes
-
+app.use("/", indexRoutes);
+app.use("/auth", authRoutes);
+app.use("/community", communityRoutes);
+app.use("/dashboard", dashboardRoutes);
 
 // Error Handling
-// Catch-all middleware for unmatched routes (404)
 app.use((req, res, next) => {
     const err = new Error('Page Not Found');
     err.status = 404;
-    next(err); // Forward to the global error handler
+    next(err);
 });
 
 // Global error handler middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);
-
-    // Set default status and determine error type
     const status = err.status || 500;
     const title = status === 404 ? 'Page Not Found' : 'Internal Server Error';
     const error = err.message;
     const stack = err.stack;
-
-    // Render the appropriate template based on status code
     res.status(status).render(`errors/${status === 404 ? '404' : '500'}`, { title, error, stack });
 });
 
-// When in development mode, start a WebSocket server for live reloading
 if (NODE_ENV.includes('dev')) {
     const ws = await import('ws');
 
@@ -52,7 +80,6 @@ if (NODE_ENV.includes('dev')) {
         wsServer.on('listening', () => {
             console.log(`WebSocket server is running on port ${wsPort}`);
         });
-
         wsServer.on('error', (error) => {
             console.error('WebSocket server error:', error);
         });

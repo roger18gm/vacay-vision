@@ -3,4 +3,4 @@
 ### Helpful dev commands
 
 pnpm instead of npm
-pnpm run dev
+pnpm run dev for live websocket reload
