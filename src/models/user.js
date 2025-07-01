@@ -10,18 +10,18 @@ const saltRounds = 12;
  */
 async function createUser(userData) {
     try {
-        const { email, password } = userData;
+        const { email, username, password } = userData;
 
         // Hash the password with automatic salt generation
-        const hashedPassword = aait bcrypt.hash(password, saltRounds);
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
 
         const query = `
-            INSERT INTO users (email, password, role_id)
-            VALUES ($1, $2, $3)
-            RETURNING id, email, role_id, created_at;
+            INSERT INTO users (email, username, password, role_id)
+            VALUES ($1, $2, $3, $4)
+            RETURNING user_id, username, email, role_id, created_at;
         `;
 
-        const values = [email, hashedPassword, 0]; // Default role is 0 (user)
+        const values = [email, username, hashedPassword, 0]; // Default role is 0 (user)
         const result = await db.query(query, values);
 
         return result.rows[0];
@@ -37,11 +37,11 @@ async function createUser(userData) {
  * @returns {Object|null} User object or null if not found
  */
 async function getUserByEmail(email) {
-    ty {
+    try {
         const query = `
-            SELECT u.id, u.email, u.password, u.role_id, u.created_at, r.role_name
+            SELECT u.user_id, u.username, u.email, u.password, u.role_id, u.created_at, r.role_name
             FROM users u
-            JOIN roles r ON u.role_id = r.id
+            JOIN roles r ON u.role_id = r.role_id
             WHERE u.email = $1;
         `;
 
@@ -94,7 +94,7 @@ async function authenticateUser(email, password) {
  */
 async function emailExists(email) {
     try {
-        const query = 'SELECT id FROM users WHERE email = $1';
+        const query = 'SELECT user_id FROM users WHERE email = $1';
         const result = await db.query(query, [email]);
         return result.rows.length > 0;
     } catch (error) {

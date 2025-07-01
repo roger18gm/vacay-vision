@@ -18,4 +18,10 @@ export const alreadyAuth = (req, res) => {
     }
 }
 
+export const authGlobalData = async (req, res, next) => {
+    res.locals.isLoggedIn = req.session.isLoggedIn || false;
+    res.locals.currentUser = req.session.user || null;
+    next();
+};
+
 // export default checkIsAuth;

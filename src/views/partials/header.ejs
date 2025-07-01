@@ -19,23 +19,22 @@
   </head>
   <body>
     <header>
+      <%- include('flash') %>
+
       <nav>
         <ul>
           <li><a href="/">Home</a></li>
           <li><a href="/community">Community</a></li>
-          <% if (typeof req !== 'undefined' && req.session &&
-          req.session.isLoggedIn) { %>
-          <li><a href="/user/profile"></a></li>
-          <li><a href="/dashboard">My Profile</a></li>
+          <% if (isLoggedIn) { %>
+          <li><a href="/user/profile">My Profile</a></li>
           <li>
             <form action="/auth/logout" method="POST" style="display: inline">
               <button type="submit" class="nav-logout-btn">Logout</button>
             </form>
           </li>
 
-          <% if (typeof req!== 'undefined' && req.session &&
-          req.session.isLoggedIn && req.user.role == 2) { %>
-          <li><a href="/dashboard">My Profile</a></li>
+          <% if (currentUser && currentUser.role == 2) { %>
+          <li><a href="/dashboard">Admin</a></li>
           <% } %> <% } else { %>
           <li><a href="/auth/login">Login</a></li>
           <li><a href="/auth/signup">Sign Up</a></li>

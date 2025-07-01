@@ -11,6 +11,7 @@ import communityRoutes from './src/routes/community.js';
 import { setupDatabase, testConnection } from './src/models/setup.js';
 import db from './src/models/db.js';
 import flashMessages from './src/middleware/flash.js';
+import { authGlobalData } from './src/middleware/auth.js';
 
 // Setup
 const __filename = fileURLToPath(import.meta.url);
@@ -45,7 +46,7 @@ app.use(session({
     }
 }));
 app.use(flashMessages);
-
+app.use(authGlobalData); // used auth user data. tried including with addGlobalData but errors..
 
 // Routes
 app.use("/", indexRoutes);

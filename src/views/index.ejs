@@ -1,6 +1,100 @@
 <%- include('partials/header') %>
-<main>
-  <h1><%= title %></h1>
-  <p>Envision your dream and/or future vacations with VacayVision!</p>
+<!-- Header/Banner Section -->
+<header
+  class="banner-section"
+  style="background-image: url('images/vacay-vision-banner.png')"
+>
+  <div class="banner-overlay">
+    <h1 class="banner-title">VacayVision</h1>
+    <p class="banner-subtitle">Visualize Your Dream Vacation, Together!</p>
+  </div>
+</header>
+
+<!-- Main Content Section -->
+<main class="main-content-container">
+  <!-- About VacayVision Section -->
+  <section class="content-section">
+    <h2 class="section-title">What is VacayVision?</h2>
+    <p class="section-paragraph">
+      VacayVision is a web application designed to help you visualize and plan
+      your dream vacations, even if you don't know where to start. It provides a
+      platform for you to create personalized vacation "widgets" (HTML div
+      cards) where you can input details like desired locations, essential items
+      to bring, and must-visit hotspots. The core idea is to foster a community
+      where travelers can share their dream itineraries, inspire others, and
+      make travel planning a collaborative and easy experience.
+    </p>
+  </section>
+
+  <!-- Our Goal Section -->
+  <section class="content-section">
+    <h2 class="section-title">Our Goal</h2>
+    <div class="goals-grid">
+      <div class="goal-item">
+        <svg class="goal-icon" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+        <p class="section-paragraph">
+          **Empower Users:** Provide a user-friendly interface for individuals
+          to meticulously plan and visualize their ideal getaways.
+        </p>
+      </div>
+      <div class="goal-item">
+        <svg class="goal-icon" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+        <p class="section-paragraph">
+          **Inspire Travel:** Create a vibrant community page where users can
+          discover new destinations, activities, and packing essentials through
+          shared dream vacations.
+        </p>
+      </div>
+      <div class="goal-item">
+        <svg class="goal-icon" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+        <p class="section-paragraph">
+          **Simplify Planning:** Offer a centralized hub for travel inspiration,
+          helping users who are unsure about potential travel destinations or
+          what to expect.
+        </p>
+      </div>
+      <div class="goal-item">
+        <svg class="goal-icon" fill="currentColor" viewBox="0 0 20 20">
+          <path
+            fill-rule="evenodd"
+            d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+            clip-rule="evenodd"
+          ></path>
+        </svg>
+        <p class="section-paragraph">
+          **Facilitate Sharing:** Enable seamless sharing of personalized
+          vacation plans, fostering a sense of community among travelers.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action Section -->
+  <section class="cta-section">
+    <h2 class="cta-title">Ready to Plan Your Dream Vacation?</h2>
+    <p class="cta-subtitle">
+      Join the VacayVision community today and start visualizing your next
+      adventure!
+    </p>
+    <a href="/auth/signup" class="cta-button"> Get Started Now! </a>
+  </section>
 </main>
 <%- include('partials/footer') %>

@@ -1,12 +1,12 @@
 import db from './db.js';
 
-const createVacationStatusEnum = `
-CREATE TYPE IF NOT EXISTS vacation_status AS ENUM ('draft', 'pending', 'approved', 'rejected');
-`;
+// const createVacationStatusEnum = `
+// CREATE TYPE IF NOT EXISTS vacation_status AS ENUM ('draft', 'pending', 'approved', 'rejected');
+// `;
 
-const createWidgetTypeEnum = `
-CREATE TYPE IF NOT EXISTS widget_type AS ENUM ('location', 'gear', 'hotspot', 'note');
-`;
+// const createWidgetTypeEnum = `
+// CREATE TYPE IF NOT EXISTS widget_type AS ENUM ('location', 'gear', 'hotspot', 'note');
+// `;
 
 /**
  * SQL to create the vacations table if it doesn't exist.
@@ -117,11 +117,11 @@ const setupDatabase = async () => {
     try {
         if (verbose) console.log('Setting up database...');
 
-        await db.query(createVacationStatusEnum);
-        if (verbose) console.log("Vacation Status Enums ready");
+        // await db.query(createVacationStatusEnum);
+        // if (verbose) console.log("Vacation Status Enums ready");
 
-        await db.query(createWidgetTypeEnum);
-        if (verbose) console.log("Widget Type Enums ready");
+        // await db.query(createWidgetTypeEnum);
+        // if (verbose) console.log("Widget Type Enums ready");
 
         // Create the categories table
         await db.query(createVacationsTable);
