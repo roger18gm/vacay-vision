@@ -1,62 +1,5 @@
 import db from './db.js';
 
-// const createVacationStatusEnum = `
-// CREATE TYPE IF NOT EXISTS vacation_status AS ENUM ('draft', 'pending', 'approved', 'rejected');
-// `;
-
-// const createWidgetTypeEnum = `
-// CREATE TYPE IF NOT EXISTS widget_type AS ENUM ('location', 'gear', 'hotspot', 'note');
-// `;
-
-/**
- * SQL to create the vacations table if it doesn't exist.
- */
-const createVacationsTable = `
-    CREATE TABLE IF NOT EXISTS vacations (
-        vacation_id SERIAL PRIMARY KEY,
-        title VARCHAR(100) NOT NULL,
-        status VARCHAR(100) NOT NULL,
-        description TEXT,
-        image_url VARCHAR(500) NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
-`;
-
-/**
- * SQL to insert a default vacation.
- */
-const insertTestVacation = `
-INSERT INTO vacations (title, status, description, image_url) VALUES 
-    ('Island Escape', 'pending', 'Dreaming of turquoise waters and white sand beaches.', 'https://example.com/beach.jpg')
-ON CONFLICT DO NOTHING;
-`;
-
-
-/**
- * SQL to create the vacations widgets table if it doesn't exist.
- */
-const createVacationWidgetsTable = `
-    CREATE TABLE IF NOT EXISTS vacation_widgets (
-        vacation_widget_id SERIAL PRIMARY KEY,
-        vacation_id INTEGER NOT NULL REFERENCES vacations(vacation_id) ON DELETE CASCADE,
-        type VARCHAR(255) NOT NULL,
-        content TEXT NOT NULL
-    );
-`;
-
-/**
- * SQL to insert a widget linked to the 'Island Escape' vacation.
- */
-const insertTestVacationWidget = `
-INSERT INTO vacation_widgets (vacation_id, type, content) VALUES (
-    (SELECT vacation_id FROM vacations WHERE title = 'Island Escape' LIMIT 1),
-    'location',
-    'Bora Bora, French Polynesia'
-)
-ON CONFLICT DO NOTHING;
-`;
-
-
 /**
  * SQL to create the roles table if it does not exist.
  * This table defines user permission levels:
@@ -106,6 +49,57 @@ INSERT INTO users (username, email, bio, password, role_id) VALUES
 ON CONFLICT (email) DO NOTHING;
 `;
 
+/**
+ * SQL to create the vacations table if it doesn't exist.
+ */
+const createVacationsTable = `
+    CREATE TABLE IF NOT EXISTS vacations (
+        vacation_id SERIAL PRIMARY KEY,
+        title VARCHAR(100) NOT NULL,
+        status VARCHAR(100) NOT NULL,
+        destination VARCHAR(100) NOT NULL,
+        description TEXT,
+        image_url VARCHAR(500) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        user_id INTEGER NOT NULL REFERENCES users(user_id) ON DELETE CASCADE
+    );
+`;
+
+/**
+ * SQL to insert a default vacation.
+ */
+const insertTestVacation = `
+INSERT INTO vacations (vacation_id, title, status, destination, description, image_url, user_id) VALUES 
+    (0, 'Island Escape', 'pending', 'Mexico', 'Dreaming of turquoise waters and white sand beaches.', 'https://example.com/beach.jpg', 1)
+ON CONFLICT (vacation_id) DO NOTHING;
+`;
+
+
+/**
+ * SQL to create the vacations widgets table if it doesn't exist.
+ */
+const createVacationWidgetsTable = `
+    CREATE TABLE IF NOT EXISTS vacation_widgets (
+        vacation_widget_id SERIAL PRIMARY KEY,
+        vacation_id INTEGER NOT NULL REFERENCES vacations(vacation_id) ON DELETE CASCADE,
+        type VARCHAR(255) NOT NULL,
+        content TEXT NOT NULL
+    );
+`;
+
+/**
+ * SQL to insert a widget linked to the 'Island Escape' vacation.
+ */
+const insertTestVacationWidget = `
+INSERT INTO vacation_widgets (vacation_widget_id, vacation_id, type, content) VALUES (
+    0,
+    (SELECT vacation_id FROM vacations WHERE title = 'Island Escape' LIMIT 1),
+    'location',
+    'Bora Bora, French Polynesia'
+)
+ON CONFLICT (vacation_widget_id) DO NOTHING;
+`;
+
 
 /**
  * Sets up the database by creating tables and inserting initial data.
@@ -116,20 +110,6 @@ const setupDatabase = async () => {
 
     try {
         if (verbose) console.log('Setting up database...');
-
-        // await db.query(createVacationStatusEnum);
-        // if (verbose) console.log("Vacation Status Enums ready");
-
-        // await db.query(createWidgetTypeEnum);
-        // if (verbose) console.log("Widget Type Enums ready");
-
-        // Create the categories table
-        await db.query(createVacationsTable);
-        if (verbose) console.log('Vacations table ready');
-
-        // Create the products table (add this after categories table creation)
-        await db.query(createVacationWidgetsTable);
-        if (verbose) console.log('Vacation Widgets table ready');
 
         // Create the roles table
         await db.query(createRolesTable);
@@ -146,6 +126,14 @@ const setupDatabase = async () => {
         // Insert default user
         await db.query(insertDefaultUser);
         if (verbose) console.log('Default user inserted');
+
+        // Create the categories table
+        await db.query(createVacationsTable);
+        if (verbose) console.log('Vacations table ready');
+
+        // Create the products table (add this after categories table creation)
+        await db.query(createVacationWidgetsTable);
+        if (verbose) console.log('Vacation Widgets table ready');
 
         // Insert test vacation
         await db.query(insertTestVacation);

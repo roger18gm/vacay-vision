@@ -1,0 +1,12 @@
+<%- include('../partials/header') %>
+<main>
+  <h1><%- title %></h1>
+  <form action="/vacations" method="POST">
+    <input type="text" name="title" placeholder="Title" required />
+    <input type="text" name="destination" placeholder="Destination" required />
+    <textarea name="description" placeholder="Description"></textarea>
+    <input type="text" name="image_url" placeholder="Image URL" />
+    <button type="submit">Create</button>
+  </form>
+</main>
+<%- include('../partials/footer') %>

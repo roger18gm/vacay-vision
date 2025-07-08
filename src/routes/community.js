@@ -1,4 +1,6 @@
 import express from 'express';
+import { getAllVacationByUserId } from '../models/vacation.js';
+import { requireLogin } from '../middleware/auth.js';
 
 const router = express.Router();
 
@@ -10,7 +12,7 @@ router.get("/", (req, res) => {
     }
     const title = "Community";
     const user = req.session.user;
-    res.render("community", { title, user });
+    res.render("community/community", { title, user });
 });
 
 router.get("/users/:userId", async (req, res) => {
@@ -30,16 +32,12 @@ router.get("/users/:userId", async (req, res) => {
     });
 });
 
-
-router.get("/profile", (req, res) => {
-    if (!req.session.isLoggedIn) {
-        req.flash('error', 'Please log in to view your profile');
-        return res.redirect('/auth/login');
-    }
-
-    const title = "My Profile";
-    const user = req.session.user;
-    res.render("profile", { title, user });
+//community/submit
+router.get("/submit", requireLogin, async (req, res) => {
+    const vacations = await getAllVacationByUserId(req.session.user.user_id);
+    const title = "Create Community Vacay Request";
+    const step = req.query.step || 'step-1'; // default to step-1 if not provided
+    res.render("community/vacay-submit", { title, vacations, step });
 });
 
 

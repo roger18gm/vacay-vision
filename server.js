@@ -7,6 +7,7 @@ import { addGlobalData } from './src/middleware/globals.js';
 import indexRoutes from './src/routes/index.js';
 import authRoutes from './src/routes/auth.js';
 import dashboardRoutes from './src/routes/dashboard.js';
+import vacationsRoutes from './src/routes/vacations.js';
 import communityRoutes from './src/routes/community.js';
 import { setupDatabase, testConnection } from './src/models/setup.js';
 import db from './src/models/db.js';
@@ -52,7 +53,8 @@ app.use(authGlobalData); // used auth user data. tried including with addGlobalD
 app.use("/", indexRoutes);
 app.use("/auth", authRoutes);
 app.use("/community", communityRoutes);
-app.use("/dashboard", dashboardRoutes);
+app.use('/vacations', vacationsRoutes);
+// app.use("/dashboard", dashboardRoutes);
 
 // Error Handling
 app.use((req, res, next) => {
