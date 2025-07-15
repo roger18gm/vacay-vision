@@ -1,6 +1,7 @@
 import express from 'express';
 import { getAllVacationByUserId } from '../models/vacation.js';
 import { requireLogin } from '../middleware/auth.js';
+import { submitCommunityRequest } from '../models/communityRequest.js';
 
 const router = express.Router();
 
@@ -34,11 +35,33 @@ router.get("/users/:userId", async (req, res) => {
 
 //community/submit
 router.get("/submit", requireLogin, async (req, res) => {
-    const vacations = await getAllVacationByUserId(req.session.user.user_id);
     const title = "Create Community Vacay Request";
-    const step = req.query.step || 'step-1'; // default to step-1 if not provided
-    res.render("community/vacay-submit", { title, vacations, step });
+    const vacations = await getAllVacationByUserId(req.session.user.user_id);
+    const step = req.query.step || 'select'; // default to step-1 if not provided
+    const selectedVacationId = req.query.vacationId;
+    res.render("community/vacay-submit", { title, vacations, step, selectedVacationId });
 });
 
+// Final submission POST
+router.post('/submit', requireLogin, async (req, res) => {
+    const { step } = req.query;
+    const { vacationId } = req.body;
+    const userId = req.session.user.user_id;
+
+    if (step === 'submit') {
+        try {
+            await submitCommunityRequest(vacationId, userId);
+
+            req.flash('success', 'Vacation submitted for community review!');
+            return res.redirect('/community/submit?step=submitted');
+        } catch (error) {
+            console.error('Error submitting vacation to community:', error);
+            req.flash('error', 'There was an error. Please try again.');
+            return res.redirect('/community/submit?step=confirm&vacationId=' + vacationId);
+        }
+    }
+
+    res.redirect('/community/submit');
+});
 
 export default router;

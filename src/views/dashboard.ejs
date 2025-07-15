@@ -1,0 +1,31 @@
+<%- include('partials/header') %>
+<main>
+  <h1><%= title %></h1>
+
+  <% if (requests.length === 0) { %>
+  <p>No pending submissions.</p>
+  <% } else { %>
+  <h2>Pending Submissions</h2>
+  <% requests.forEach(req => { %>
+  <div class="vacation-card">
+    <h3><%= req.title %> – by <%= req.username %></h3>
+    <p><strong>Destination:</strong> <%= req.destination %></p>
+    <p><%= req.description %></p>
+    <img src="<%= req.image_url %>" style="max-width: 300px" /><br />
+
+    <form method="POST" action="/dashboard/<%= req.request_id %>/approve">
+      <button type="submit">Approve</button>
+    </form>
+
+    <form method="POST" action="/dashboard/<%= req.request_id %>/reject">
+      <input
+        type="text"
+        name="reason"
+        placeholder="Rejection reason (optional)"
+      />
+      <button type="submit">Reject</button>
+    </form>
+  </div>
+  <% }) %> <% } %>
+</main>
+<%- include('partials/footer') %>

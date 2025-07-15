@@ -34,7 +34,7 @@
             </form>
           </li>
 
-          <% if (currentUser && currentUser.role == 2) { %>
+          <% if (currentUser && currentUser.role_id == 2) { %>
           <li><a href="/dashboard">Admin</a></li>
           <% } %> <% } else { %>
           <li><a href="/auth/login">Login</a></li>

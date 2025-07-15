@@ -54,7 +54,7 @@ app.use("/", indexRoutes);
 app.use("/auth", authRoutes);
 app.use("/community", communityRoutes);
 app.use('/vacations', vacationsRoutes);
-// app.use("/dashboard", dashboardRoutes);
+app.use("/dashboard", dashboardRoutes);
 
 // Error Handling
 app.use((req, res, next) => {

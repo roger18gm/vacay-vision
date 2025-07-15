@@ -6,21 +6,21 @@ import db from './db.js';
  * 0 = Regular user, 1 = Moderator, 2 = Admin
  */
 const createRolesTable = `
-CREATE TABLE IF NOT EXISTS roles (
-    role_id INTEGER PRIMARY KEY,
-    role_name VARCHAR(50) NOT NULL UNIQUE
-);
+    CREATE TABLE IF NOT EXISTS roles (
+        role_id INTEGER PRIMARY KEY,
+        role_name VARCHAR(50) NOT NULL UNIQUE
+    );
 `;
 
 /**
  * SQL to insert default roles if they do not exist.
  */
 const insertDefaultRoles = `
-INSERT INTO roles (role_id, role_name) VALUES 
-    (0, 'user'),
-    (1, 'moderator'), 
-    (2, 'admin')
-ON CONFLICT (role_id) DO NOTHING;
+    INSERT INTO roles (role_id, role_name) VALUES 
+        (0, 'user'),
+        (1, 'moderator'), 
+        (2, 'admin')
+    ON CONFLICT (role_id) DO NOTHING;
 `;
 
 /**
@@ -44,9 +44,9 @@ CREATE TABLE IF NOT EXISTS users (
  * SQL to insert default user.
  */
 const insertDefaultUser = `
-INSERT INTO users (username, email, bio, password, role_id) VALUES 
-    ('demo', 'user@example.com', 'demo bio', 'thepassword', 2)
-ON CONFLICT (email) DO NOTHING;
+    INSERT INTO users (username, email, bio, password, role_id) VALUES 
+        ('demo', 'user@example.com', 'demo bio', 'thepassword', 2)
+    ON CONFLICT (email) DO NOTHING;
 `;
 
 /**
@@ -69,9 +69,9 @@ const createVacationsTable = `
  * SQL to insert a default vacation.
  */
 const insertTestVacation = `
-INSERT INTO vacations (vacation_id, title, status, destination, description, image_url, user_id) VALUES 
-    (0, 'Island Escape', 'pending', 'Mexico', 'Dreaming of turquoise waters and white sand beaches.', 'https://example.com/beach.jpg', 1)
-ON CONFLICT (vacation_id) DO NOTHING;
+    INSERT INTO vacations (vacation_id, title, status, destination, description, image_url, user_id) VALUES 
+        (0, 'Island Escape', 'pending', 'Mexico', 'Dreaming of turquoise waters and white sand beaches.', 'https://example.com/beach.jpg', 1)
+    ON CONFLICT (vacation_id) DO NOTHING;
 `;
 
 
@@ -91,13 +91,23 @@ const createVacationWidgetsTable = `
  * SQL to insert a widget linked to the 'Island Escape' vacation.
  */
 const insertTestVacationWidget = `
-INSERT INTO vacation_widgets (vacation_widget_id, vacation_id, type, content) VALUES (
-    0,
-    (SELECT vacation_id FROM vacations WHERE title = 'Island Escape' LIMIT 1),
-    'location',
-    'Bora Bora, French Polynesia'
-)
-ON CONFLICT (vacation_widget_id) DO NOTHING;
+    INSERT INTO vacation_widgets (vacation_widget_id, vacation_id, type, content) VALUES (
+        0,
+        (SELECT vacation_id FROM vacations WHERE title = 'Island Escape' LIMIT 1),
+        'location',
+        'Bora Bora, French Polynesia'
+    )
+    ON CONFLICT (vacation_widget_id) DO NOTHING;
+`;
+
+const createCommunityRequestTable = `
+    CREATE TABLE IF NOT EXISTS community_requests (
+        request_id SERIAL PRIMARY KEY,
+        vacation_id INT NOT NULL REFERENCES vacations(vacation_id) ON DELETE CASCADE,
+        user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
+        status VARCHAR(50) NOT NULL DEFAULT 'pending', -- can be 'pending', 'approved', 'rejected'
+        submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
 `;
 
 
@@ -134,6 +144,9 @@ const setupDatabase = async () => {
         // Create the products table (add this after categories table creation)
         await db.query(createVacationWidgetsTable);
         if (verbose) console.log('Vacation Widgets table ready');
+
+        await db.query(createCommunityRequestTable);
+        if (verbose) console.log('Community Requests Widgets table ready');
 
         // Insert test vacation
         await db.query(insertTestVacation);
