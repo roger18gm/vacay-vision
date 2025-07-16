@@ -2,11 +2,11 @@ import express from 'express';
 import { getAllVacationByUserId } from '../models/vacation.js';
 import { requireLogin } from '../middleware/auth.js';
 import { getAllCommunityRequestsByStatus, submitCommunityRequest } from '../models/communityRequest.js';
+import { getAllHeadlines } from '../models/headline.js';
 
 const router = express.Router();
 
 router.get("/", async (req, res) => {
-    // Check if user is logged in
     if (!req.session.isLoggedIn) {
         req.flash('error', 'Please log in to access the community page');
         return res.redirect('/auth/login');
@@ -14,7 +14,8 @@ router.get("/", async (req, res) => {
     const title = "Community";
     const user = req.session.user;
     const rows = await getAllCommunityRequestsByStatus('approved');
-    res.render("community/community", { title, user, approved: rows });
+    const headlines = await getAllHeadlines();
+    res.render("community/community", { title, headlines, user, approved: rows });
 });
 
 //community/submit

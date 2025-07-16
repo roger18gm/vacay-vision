@@ -30,6 +30,6 @@ export const getAllCommunityRequestsByStatus = async (status) => {
         const result = await db.query(query, [status]);
         return result.rows;
     } catch (err) {
-        console.error('Error fetching dashboard:', err);
+        console.error('Error fetching community requests:', err);
     }
 }

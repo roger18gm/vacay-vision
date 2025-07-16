@@ -113,6 +113,15 @@ const createCommunityRequestTable = `
     );
 `;
 
+const createHorizonHeadlinesTable = `
+    CREATE TABLE IF NOT EXISTS horizon_headlines (
+        headline_id SERIAL PRIMARY KEY,
+        message TEXT,
+        created_by INT REFERENCES users(user_id),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+`;
+
 
 /**
  * Sets up the database by creating tables and inserting initial data.
@@ -158,6 +167,9 @@ const setupDatabase = async () => {
         // Insert test vacation widget
         await db.query(insertTestVacationWidget);
         if (verbose) console.log('Test Vacation Widget inserted');
+
+        await db.query(createHorizonHeadlinesTable);
+        if (verbose) console.log('Horizon Headline Table Created')
 
         if (verbose) console.log('Database setup complete');
         return true;

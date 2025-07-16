@@ -2,18 +2,36 @@ import express from 'express';
 import { getAllCommunityRequestsByStatus } from '../models/communityRequest.js';
 import { requireAdmin } from '../middleware/auth.js';
 import db from '../models/db.js'; // prob later change this to controller imports
+import { createHeadline } from '../models/headline.js';
 
 const router = express.Router();
 
 // Right now displays only pending but should I show approved and rejected? 
 router.get('/', requireAdmin, async (req, res) => {
     try {
-        const rows = await getAllCommunityRequestsByStatus('pending');
-        res.render('dashboard', { title: 'Admin Dashboard', requests: rows });
+        const pending = await getAllCommunityRequestsByStatus('pending');
+        const rejected = await getAllCommunityRequestsByStatus('rejected');
+        res.render('dashboard', { title: 'Admin Dashboard', pending, rejected });
     } catch (err) {
         console.error('Error fetching dashboard:', err);
         req.flash('error', 'Error loading dashboard');
         res.redirect('/');
+    }
+});
+
+// horizon headline message submission
+router.post('/horizon/upload', requireAdmin, async (req, res) => {
+    const creatorId = req.session.user.user_id;
+    const headline = req.body.headline || null;
+
+    try {
+        const message = await createHeadline(headline, creatorId);
+        req.flash('success', 'Headline Posted');
+        res.redirect('/dashboard');
+    } catch (err) {
+        console.error('Headline creation error:', err);
+        req.flash('error', 'Failed to post headline');
+        res.redirect('/dashboard');
     }
 });
 

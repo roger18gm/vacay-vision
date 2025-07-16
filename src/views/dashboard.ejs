@@ -2,22 +2,30 @@
 <main>
   <h1><%= title %></h1>
 
-  <% if (requests.length === 0) { %>
+  <div>
+    <h2>Submit Global Headline</h2>
+    <form method="POST" action="/dashboard/horizon/upload">
+      <input type="text" name="headline" placeholder="Enter Horizon Headline" />
+      <button type="submit">Submit Headline</button>
+    </form>
+  </div>
+
+  <% if (pending.length === 0) { %>
   <p>No pending submissions.</p>
   <% } else { %>
   <h2>Pending Submissions</h2>
-  <% requests.forEach(req => { %>
+  <% pending.forEach(pend => { %>
   <div class="vacation-card">
-    <h3><%= req.title %> – by <%= req.username %></h3>
-    <p><strong>Destination:</strong> <%= req.destination %></p>
-    <p><%= req.description %></p>
-    <img src="<%= req.image_url %>" style="max-width: 300px" /><br />
+    <h3><%= pend.title %> – by <%= pend.username %></h3>
+    <p><strong>Destination:</strong> <%= pend.destination %></p>
+    <p><%= pend.description %></p>
+    <img src="<%= pend.image_url %>" style="max-width: 300px" /><br />
 
-    <form method="POST" action="/dashboard/<%= req.request_id %>/approve">
+    <form method="POST" action="/dashboard/<%= pend.request_id %>/approve">
       <button type="submit">Approve</button>
     </form>
 
-    <form method="POST" action="/dashboard/<%= req.request_id %>/reject">
+    <form method="POST" action="/dashboard/<%= pend.request_id %>/reject">
       <input
         type="text"
         name="reason"
@@ -25,6 +33,17 @@
       />
       <button type="submit">Reject</button>
     </form>
+  </div>
+  <% }) %> <% } %> <% if (rejected.length === 0) { %>
+  <p>No rejected submissions.</p>
+  <% } else { %>
+  <h2>Rejected Submissions</h2>
+  <% rejected.forEach(rej => { %>
+  <div class="vacation-card">
+    <h3><%= rej.title %> – by <%= rej.username %></h3>
+    <p><strong>Destination:</strong> <%= rej.destination %></p>
+    <p><%= rej.description %></p>
+    <img src="<%= rej.image_url %>" style="max-width: 300px" /><br />
   </div>
   <% }) %> <% } %>
 </main>

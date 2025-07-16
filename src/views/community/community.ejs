@@ -5,14 +5,26 @@
     >Click here to submit one of your vacays for approval to the community
     page</a
   >
+  <div>
+    <h2>Horizon Headlines</h2>
+    <% if (headlines.length === 0) { %>
+    <p>No Horizon Headlines</p>
+    <% } else { %> <% headlines.forEach(hl => { %>
+    <div class="headline-card">
+      <h3><%= hl.message %></h3>
+      <p><%= hl.created_at %></p>
+    </div>
+    <% }) %> <% } %>
+  </div>
+
   <% if (approved.length === 0) { %>
   <p>No community vacations D:</p>
   <% } else { %>
-  <h2>User Generated Vacations</h2>
+  <h2>The Collection:</h2>
   <% approved.forEach(apr => { %>
   <div class="vacation-card">
     <h3>
-      <%= apr.title %> - by
+      <a href="/"><%= apr.title %> </a> - by
       <a href="/users/<%= apr.user_id%>"><%= apr.username %> </a>
     </h3>
     <p><strong>Destination:</strong> <%= apr.destination %></p>
