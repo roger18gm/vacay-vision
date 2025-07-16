@@ -1,10 +1,24 @@
 <%- include('../partials/header') %>
 <main>
   <h1><%= title %></h1>
-  <p>Welcome your username is <%= user.username %></p>
   <a href="/community/submit"
     >Click here to submit one of your vacays for approval to the community
     page</a
   >
+  <% if (approved.length === 0) { %>
+  <p>No community vacations D:</p>
+  <% } else { %>
+  <h2>User Generated Vacations</h2>
+  <% approved.forEach(apr => { %>
+  <div class="vacation-card">
+    <h3>
+      <%= apr.title %> - by
+      <a href="/users/<%= apr.user_id%>"><%= apr.username %> </a>
+    </h3>
+    <p><strong>Destination:</strong> <%= apr.destination %></p>
+    <p><%= apr.description %></p>
+    <img src="<%= apr.image_url %>" style="max-width: 300px" /><br />
+  </div>
+  <% }) %> <% } %>
 </main>
 <%- include('../partials/footer') %>

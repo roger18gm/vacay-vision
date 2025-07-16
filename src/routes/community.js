@@ -1,11 +1,11 @@
 import express from 'express';
 import { getAllVacationByUserId } from '../models/vacation.js';
 import { requireLogin } from '../middleware/auth.js';
-import { submitCommunityRequest } from '../models/communityRequest.js';
+import { getAllCommunityRequestsByStatus, submitCommunityRequest } from '../models/communityRequest.js';
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
+router.get("/", async (req, res) => {
     // Check if user is logged in
     if (!req.session.isLoggedIn) {
         req.flash('error', 'Please log in to access the community page');
@@ -13,24 +13,8 @@ router.get("/", (req, res) => {
     }
     const title = "Community";
     const user = req.session.user;
-    res.render("community/community", { title, user });
-});
-
-router.get("/users/:userId", async (req, res) => {
-    const userId = req.params.userId;
-    const user = await getUserById(userId); // you'll implement this
-    const vacations = await getVacationsByUserId(userId);
-
-    if (!user) {
-        req.flash('error', 'User not found');
-        return res.redirect('/community');
-    }
-
-    res.render("user-profile", {
-        title: `${user.username}'s Profile`,
-        user,
-        vacations
-    });
+    const rows = await getAllCommunityRequestsByStatus('approved');
+    res.render("community/community", { title, user, approved: rows });
 });
 
 //community/submit

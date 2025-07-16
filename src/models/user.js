@@ -54,6 +54,28 @@ async function getUserByEmail(email) {
 }
 
 /**
+ * Finds a user by id
+ * @param {string} id - User's user_id
+ * @returns {Object|null} User object or null if not found
+ */
+async function getUserById(userId) {
+    try {
+        const query = `
+            SELECT u.user_id, u.username, u.email, u.password, u.role_id, u.created_at, r.role_name
+            FROM users u
+            JOIN roles r ON u.role_id = r.role_id
+            WHERE u.user_id = $1;
+        `;
+
+        const result = await db.query(query, [userId]);
+        return result.rows[0] || null;
+    } catch (error) {
+        console.error('Error fetching user by id:', error.message);
+        throw error;
+    }
+}
+
+/**
  * Verifies a user's password against the stored hash
  * @param {string} email - User's email address
  * @param {string} password - Plain text password to verify
@@ -103,4 +125,4 @@ async function emailExists(email) {
     }
 }
 
-export { createUser, getUserByEmail, authenticateUser, emailExists };
+export { createUser, getUserByEmail, getUserById, authenticateUser, emailExists };

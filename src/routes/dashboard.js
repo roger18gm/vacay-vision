@@ -1,6 +1,7 @@
 import express from 'express';
 import { getAllCommunityRequestsByStatus } from '../models/communityRequest.js';
 import { requireAdmin } from '../middleware/auth.js';
+import db from '../models/db.js'; // prob later change this to controller imports
 
 const router = express.Router();
 

@@ -14,11 +14,10 @@
       alt="Image of <%= v.title %>"
       style="max-width: 300px"
     />
+    <% if (id == currentUser.user_id) { %>
     <a href="/vacation/<%- v.vacation_id %>/edit">Edit</a>
+    <% } %>
   </article>
   <% }) %>
-
-  <p>user id is</p>
-  <%- id %>
 </main>
 <%- include('../partials/footer') %>

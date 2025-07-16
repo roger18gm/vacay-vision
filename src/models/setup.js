@@ -106,7 +106,10 @@ const createCommunityRequestTable = `
         vacation_id INT NOT NULL REFERENCES vacations(vacation_id) ON DELETE CASCADE,
         user_id INT NOT NULL REFERENCES users(user_id) ON DELETE CASCADE,
         status VARCHAR(50) NOT NULL DEFAULT 'pending', -- can be 'pending', 'approved', 'rejected'
-        submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        reviewed_at TIMESTAMP,
+        reviewed_by INT REFERENCES users(user_id),
+        rejection_reason TEXT
     );
 `;
 

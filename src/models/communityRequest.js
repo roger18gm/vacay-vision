@@ -19,7 +19,7 @@ export const getAllCommunityRequestsByStatus = async (status) => {
         const query = `
             SELECT cr.request_id, cr.status, cr.submitted_at,
                     v.title, v.destination, v.description, v.image_url,
-                    u.username
+                    u.username, u.user_id
             FROM community_requests cr
             JOIN vacations v ON cr.vacation_id = v.vacation_id
             JOIN users u ON cr.user_id = u.user_id
