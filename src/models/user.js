@@ -55,13 +55,13 @@ async function getUserByEmail(email) {
 
 /**
  * Finds a user by id
- * @param {string} id - User's user_id
+ * @param {number} userId - User's user_id
  * @returns {Object|null} User object or null if not found
  */
 async function getUserById(userId) {
     try {
         const query = `
-            SELECT u.user_id, u.username, u.email, u.password, u.role_id, u.created_at, r.role_name
+            SELECT u.user_id, u.username, u.email, u.bio, u.role_id, u.created_at, r.role_name
             FROM users u
             JOIN roles r ON u.role_id = r.role_id
             WHERE u.user_id = $1;

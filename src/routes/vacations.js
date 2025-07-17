@@ -6,17 +6,9 @@ import {
     updateVacationById,
     deleteVacationById
 } from '../models/vacation.js';
+import { requireLogin } from '../middleware/auth.js';
 
 const router = express.Router();
-
-// Middleware to ensure login
-function requireLogin(req, res, next) {
-    if (!req.session.isLoggedIn) {
-        req.flash('error', 'You must be logged in to view that page');
-        return res.redirect('/auth/login');
-    }
-    next();
-}
 
 // Show form to create new vacation
 router.get('/', requireLogin, async (req, res) => {

@@ -9,6 +9,7 @@ import authRoutes from './src/routes/auth.js';
 import dashboardRoutes from './src/routes/dashboard.js';
 import vacationsRoutes from './src/routes/vacations.js';
 import communityRoutes from './src/routes/community.js';
+import usersRoutes from './src/routes/users.js';
 import { setupDatabase, testConnection } from './src/models/setup.js';
 import db from './src/models/db.js';
 import flashMessages from './src/middleware/flash.js';
@@ -55,6 +56,7 @@ app.use("/auth", authRoutes);
 app.use("/community", communityRoutes);
 app.use('/vacations', vacationsRoutes);
 app.use("/dashboard", dashboardRoutes);
+app.use("/users", usersRoutes);
 
 // Error Handling
 app.use((req, res, next) => {

@@ -122,7 +122,15 @@ const createHorizonHeadlinesTable = `
     );
 `;
 
-
+const createSupportTable = `
+    CREATE TABLE IF NOT EXISTS support_feedback (
+        support_id SERIAL PRIMARY KEY,
+        type VARCHAR(50) NOT NULL,
+        message TEXT,
+        submitted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        submitted_by INT REFERENCES users(user_id)
+    );
+`;
 /**
  * Sets up the database by creating tables and inserting initial data.
  * This function should be called when the server starts.
@@ -170,6 +178,10 @@ const setupDatabase = async () => {
 
         await db.query(createHorizonHeadlinesTable);
         if (verbose) console.log('Horizon Headline Table Created')
+
+        await db.query(createSupportTable);
+        if (verbose) console.log('Support Table Created')
+
 
         if (verbose) console.log('Database setup complete');
         return true;

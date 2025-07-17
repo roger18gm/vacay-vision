@@ -26,14 +26,15 @@
           <li><a href="/">Home</a></li>
           <li><a href="/community">Community</a></li>
           <% if (isLoggedIn) { %>
-          <li><a href="/user/profile">My Profile</a></li>
-          <li><a href="/vacations">My Vacays</a></li>
+          <li>
+            <a href="/users/user/<%= currentUser.user_id %>">My Profile</a>
+          </li>
+          <li><a href="/vacations">VacayVision Board</a></li>
           <li>
             <form action="/auth/logout" method="POST" style="display: inline">
               <button type="submit" class="nav-logout-btn">Logout</button>
             </form>
           </li>
-
           <% if (currentUser && currentUser.role_id == 2) { %>
           <li><a href="/dashboard">Admin</a></li>
           <% } %> <% } else { %>

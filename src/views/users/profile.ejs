@@ -1,0 +1,64 @@
+<%- include('../partials/header') %>
+<main>
+  <h1><%= title %></h1>
+
+  <section>
+    <h3>Account Info</h3>
+    <p><strong>Email:</strong> <%= user.email %></p>
+    <p><strong>Role:</strong> <%= user.role_name %></p>
+    <p><strong>Bio:</strong> <%= user.bio %></p>
+    <p><strong>Member Since:</strong> <%= user.created_at.toDateString() %></p>
+  </section>
+
+  <% if (isOwnProfile) { %>
+  <section>
+    <h3>Quick Actions</h3>
+    <ul>
+      <li><a href="/vacations/new">Create New Vacation</a></li>
+      <li><a href="/dashboard">Moderation Panel</a></li>
+    </ul>
+  </section>
+
+  <form method="POST" action="/auth/logout">
+    <button type="submit">Logout</button>
+  </form>
+
+  <section>
+    <h3>Feedback</h3>
+    <form method="POST" action="/users/user/<%= currentUser.user_id %>">
+      <% types.forEach(t => { %>
+      <label>
+        <input type="radio" name="type" value="<%= t %>" required />
+        <strong><%= t %></strong>
+      </label>
+      <% }) %>
+
+      <textarea
+        name="message"
+        placeholder="Got feedback or a bug report?"
+      ></textarea>
+      <button type="submit">Send</button>
+    </form>
+  </section>
+  <% } %>
+
+  <section>
+    <h3><%= isOwnProfile ? "Your" : user.username + "'s" %> Vacations</h3>
+    <% vacays.forEach(v => { %>
+    <div class="vacation-card">
+      <h2><%= v.title %></h2>
+      <p><strong>Destination:</strong> <%= v.destination %></p>
+      <p><%= v.description %></p>
+      <!-- <img     FOR SOME REASON THE IMAGE URL GETS PASSED INTO REQ PARAMS AS THE USER ID IDK WHY
+        src="<%= v.image_url %>"
+        alt="Image of <%= v.title %>"
+        style="max-width: 300px"
+      /> -->
+      <% if (isOwnProfile) { %>
+      <a href="/vacation/<%= v.vacation_id %>/edit">Edit</a>
+      <% } %>
+    </div>
+    <% }) %>
+  </section>
+</main>
+<%- include('../partials/footer') %>

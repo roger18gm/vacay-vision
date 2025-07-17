@@ -7,8 +7,6 @@ export const createHeadline = async (headline, creatorId) => {
       INSERT INTO horizon_headlines (message, created_at, created_by) VALUES (
        $1, CURRENT_TIMESTAMP, $2 )
     `, [headline, creatorId]);
-
-        req.flash('success', 'Headline Posted');
     } catch (err) {
         console.error('Headline creation error:', err);
     }
