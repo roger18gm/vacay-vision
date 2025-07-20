@@ -9,6 +9,7 @@ import {
 import { requireLogin } from '../middleware/auth.js';
 import { createWidget, deleteWidget, getWidgetById, getWidgetsByVacationId, updateWidget } from '../models/vacationWidget.js';
 import { getUserById } from '../models/user.js';
+import { addComment, getCommentsByVacationId } from '../models/vacationComment.js';
 
 const router = express.Router();
 
@@ -51,11 +52,33 @@ router.get('/:vacationId', requireLogin, async (req, res) => {
         const widgets = await getWidgetsByVacationId(vacationId);
         const vacationUser = await getUserById(vacation.user_id);
         const userId = req.session.user.user_id;
-        res.render('vacations/vacationDetail', { title: vacation.title, vacation, widgets: widgets === null ? [] : widgets, userId, vacationUser });
+        const comments = await getCommentsByVacationId(vacationId);
+        res.render('vacations/vacationDetail', { title: vacation.title, vacation, widgets: widgets === null ? [] : widgets, userId, vacationUser, comments });
     } catch (err) {
         console.error(err);
         req.flash('error', 'There was an error getting this vacation.');
         res.redirect('/community');
+    }
+});
+
+router.post('/:vacationId/comments', requireLogin, async (req, res) => {
+    const { vacationId } = req.params;
+    const { content } = req.body;
+    const userId = req.session.user.user_id;
+
+    if (!content || content.trim() === '') {
+        req.flash('error', 'Comment cannot be empty');
+        return res.redirect(`/vacations/${vacationId}`);
+    }
+
+    try {
+        await addComment(vacationId, userId, content.trim());
+        req.flash('success', 'Comment added');
+        res.redirect(`/vacations/${vacationId}`);
+    } catch (err) {
+        console.error('Error adding comment:', err.message);
+        req.flash('error', 'Could not add comment');
+        res.redirect(`/vacations/${vacationId}`);
     }
 });
 

@@ -121,6 +121,17 @@ const createSupportTable = `
         submitted_by INT REFERENCES users(user_id)
     );
 `;
+
+const createVacationCommentsTable = `
+    CREATE TABLE IF NOT EXISTS vacation_comments (
+        comment_id SERIAL PRIMARY KEY,
+        vacation_id INTEGER REFERENCES vacations(vacation_id) ON DELETE CASCADE,
+        user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+        content TEXT NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+`;
+
 /**
  * Sets up the database by creating tables and inserting initial data.
  * This function should be called when the server starts.
@@ -168,6 +179,8 @@ const setupDatabase = async () => {
         await db.query(createSupportTable);
         if (verbose) console.log('Support Table Created')
 
+        await db.query(createVacationCommentsTable);
+        if (verbose) console.log('Vacation Comments Table Created')
 
         if (verbose) console.log('Database setup complete');
         return true;

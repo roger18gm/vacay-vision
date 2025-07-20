@@ -102,7 +102,36 @@
   </article>
   <% }) %>
 
-  <a href="/vacations/new"><h3>Create New Vacay</h3></a>
+  <section class="comments">
+    <h2>Comments</h2>
+
+    <% if (comments.length === 0) { %>
+    <p>No comments yet. Be the first to comment!</p>
+    <% } else { %>
+    <ul>
+      <% comments.forEach(comment => { %>
+      <li>
+        <strong><%= comment.username %></strong> said:
+        <p><%= comment.content %></p>
+        <small><%= new Date(comment.created_at).toLocaleString() %></small>
+      </li>
+      <% }) %>
+    </ul>
+    <% } %>
+
+    <form
+      method="POST"
+      action="/vacations/<%= vacation.vacation_id %>/comments"
+    >
+      <textarea
+        name="content"
+        rows="3"
+        placeholder="Leave a comment..."
+        required
+      ></textarea>
+      <button type="submit">Post Comment</button>
+    </form>
+  </section>
 </main>
 
 <script>
