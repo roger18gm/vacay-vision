@@ -23,7 +23,7 @@ async function createVacation(vacayData, userId) {
         return result.rows[0];
     } catch (error) {
         console.error('Error creating vacation:', error.message);
-        throw error;
+        return error;
     }
 }
 
@@ -35,12 +35,12 @@ async function createVacation(vacayData, userId) {
 async function getVacationById(id) {
     try {
         const query = `
-            SELECT v.vacation_id, v.title, v.destination, v.description, v.image_url, u.role_id, u.created_at, r.role_name
+            SELECT v.vacation_id, v.title, v.destination, v.description, v.image_url, v.user_id, v.created_at
             FROM vacations v
             WHERE v.vacation_id = $1;
         `;
 
-        const result = await db.query(query);
+        const result = await db.query(query, [id]);
         return result.rows[0] || null;
     } catch (error) {
         console.error('Error fetching vacation by Id:', error.message);

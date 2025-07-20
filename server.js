@@ -14,6 +14,7 @@ import { setupDatabase, testConnection } from './src/models/setup.js';
 import db from './src/models/db.js';
 import flashMessages from './src/middleware/flash.js';
 import { authGlobalData } from './src/middleware/auth.js';
+import methodOverride from 'method-override';
 
 // Setup
 const __filename = fileURLToPath(import.meta.url);
@@ -27,6 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'src/views'));
 
 // Middleware
+app.use(methodOverride('_method'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(addGlobalData);

@@ -17,7 +17,7 @@ export const submitCommunityRequest = async (vacationId, userId) => {
 export const getAllCommunityRequestsByStatus = async (status) => {
     try {
         const query = `
-            SELECT cr.request_id, cr.status, cr.submitted_at,
+            SELECT cr.request_id, cr.vacation_id, cr.status, cr.submitted_at,
                     v.title, v.destination, v.description, v.image_url,
                     u.username, u.user_id
             FROM community_requests cr

@@ -74,7 +74,6 @@ const insertTestVacation = `
     ON CONFLICT (vacation_id) DO NOTHING;
 `;
 
-
 /**
  * SQL to create the vacations widgets table if it doesn't exist.
  */
@@ -82,22 +81,13 @@ const createVacationWidgetsTable = `
     CREATE TABLE IF NOT EXISTS vacation_widgets (
         vacation_widget_id SERIAL PRIMARY KEY,
         vacation_id INTEGER NOT NULL REFERENCES vacations(vacation_id) ON DELETE CASCADE,
-        type VARCHAR(255) NOT NULL,
-        content TEXT NOT NULL
+        title VARCHAR(255) NOT NULL,
+        type VARCHAR(100) NOT NULL, -- e.g., "video", "quote", "product", "location"
+        content TEXT NOT NULL, -- actual content, like description or embed
+        external_url TEXT, -- optional URL, can be null
+        sort_order INTEGER DEFAULT 0, -- helps in ordering widgets on the frontend
+        created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
     );
-`;
-
-/**
- * SQL to insert a widget linked to the 'Island Escape' vacation.
- */
-const insertTestVacationWidget = `
-    INSERT INTO vacation_widgets (vacation_widget_id, vacation_id, type, content) VALUES (
-        0,
-        (SELECT vacation_id FROM vacations WHERE title = 'Island Escape' LIMIT 1),
-        'location',
-        'Bora Bora, French Polynesia'
-    )
-    ON CONFLICT (vacation_widget_id) DO NOTHING;
 `;
 
 const createCommunityRequestTable = `
@@ -171,10 +161,6 @@ const setupDatabase = async () => {
         // Insert test vacation
         await db.query(insertTestVacation);
         if (verbose) console.log('Test Vacation inserted');
-
-        // Insert test vacation widget
-        await db.query(insertTestVacationWidget);
-        if (verbose) console.log('Test Vacation Widget inserted');
 
         await db.query(createHorizonHeadlinesTable);
         if (verbose) console.log('Horizon Headline Table Created')

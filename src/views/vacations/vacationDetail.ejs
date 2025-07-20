@@ -1,0 +1,120 @@
+<%- include('../partials/header') %>
+<main>
+  <h1><%- title %></h1>
+
+  <div class="vacation-card">
+    <h2>Created by <strong><%= vacationUser.username %></strong></h2>
+    <h2>Member since <strong><%= vacationUser.created_at %></strong></h2>
+    <p><strong>Destination:</strong> <%= vacation.destination %></p>
+    <p><%= vacation.description %></p>
+    <img
+      src="<%= vacation.image_url %>"
+      alt="Image of <%= vacation.title %>"
+      style="max-width: 300px"
+    />
+    <% if (currentUser && vacation.user_id == currentUser.user_id) { %>
+    <a href="/vacation/<%- vacation.vacation_id %>/edit">Edit Vacation</a>
+    <% } %>
+  </div>
+  <button>Add to your Favorites</button>
+  <% if (currentUser && vacation.user_id == currentUser.user_id) { %>
+  <button
+    onclick="document.getElementById('add-widget-form').classList.toggle('hidden')"
+  >
+    + Add Widget
+  </button>
+
+  <form
+    id="add-widget-form"
+    class="hidden"
+    method="POST"
+    action="/vacations/<%= vacation.vacation_id %>/widgets"
+  >
+    <label>Title:</label>
+    <input type="text" name="title" required />
+
+    <label>Type:</label>
+    <select name="type">
+      <option value="text">Text</option>
+      <option value="image">Image</option>
+      <option value="link">External Link</option>
+    </select>
+
+    <label>Content:</label>
+    <textarea name="content" required></textarea>
+
+    <label>External URL (optional):</label>
+    <input type="url" name="external_url" />
+
+    <button type="submit">Add Widget</button>
+  </form>
+  <% } %> <% widgets.forEach(w => { %>
+  <article class="widget-card">
+    <h2><%= w.title %></h2>
+    <p><strong>Type:</strong> <%= w.type %></p>
+    <p><%= w.content %></p>
+    <% if (w.external_url) { %>
+    <p>
+      <strong>Link:</strong>
+      <a href="<%= w.external_url %>" target="_blank"><%= w.external_url %></a>
+    </p>
+    <% } %> <% if (currentUser && vacation.user_id == currentUser.user_id) { %>
+    <button onclick="toggleEditForm('<%= w.vacation_widget_id %>')">
+      Edit
+    </button>
+    <form
+      style="display: inline"
+      method="POST"
+      action="/vacations/widgets/<%- w.vacation_widget_id %>?_method=DELETE"
+    >
+      <button type="submit">Delete</button>
+    </form>
+
+    <form
+      id="edit-form-<%= w.vacation_widget_id %>"
+      class="hidden"
+      method="POST"
+      action="/vacations/widgets/<%- w.vacation_widget_id %>?_method=PUT"
+    >
+      <input type="hidden" name="_method" value="PUT" />
+      <label>Title:</label>
+
+      <input type="text" name="title" value="<%= w.title %>" required />
+      <label>Type:</label>
+
+      <select name="type" value="<%= w.type %>">
+        <option value="text">Text</option>
+        <option value="image">Image</option>
+        <option value="link">External Link</option>
+      </select>
+      <label>Content:</label>
+      <textarea name="content"><%= w.content %></textarea>
+      <label>External URL:</label>
+
+      <input
+        type="url"
+        name="external_url"
+        value="<%= w.external_url || '' %>"
+      />
+      <button type="submit">Update</button>
+    </form>
+    <% } %>
+  </article>
+  <% }) %>
+
+  <a href="/vacations/new"><h3>Create New Vacay</h3></a>
+</main>
+
+<script>
+  function toggleEditForm(widgetId) {
+    const form = document.getElementById("edit-form-" + widgetId);
+    form.classList.toggle("hidden");
+  }
+</script>
+
+<style>
+  .hidden {
+    display: none;
+  }
+</style>
+<%- include('../partials/footer') %>

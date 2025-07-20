@@ -7,6 +7,8 @@ import {
     deleteVacationById
 } from '../models/vacation.js';
 import { requireLogin } from '../middleware/auth.js';
+import { createWidget, deleteWidget, getWidgetById, getWidgetsByVacationId, updateWidget } from '../models/vacationWidget.js';
+import { getUserById } from '../models/user.js';
 
 const router = express.Router();
 
@@ -38,6 +40,22 @@ router.post('/', requireLogin, async (req, res) => {
     } catch (err) {
         req.flash('error', 'Failed to create vacation.');
         res.redirect('/vacations/new');
+    }
+});
+
+router.get('/:vacationId', requireLogin, async (req, res) => {
+    const vacationId = parseInt(req.params.vacationId);
+
+    try {
+        const vacation = await getVacationById(vacationId);
+        const widgets = await getWidgetsByVacationId(vacationId);
+        const vacationUser = await getUserById(vacation.user_id);
+        const userId = req.session.user.user_id;
+        res.render('vacations/vacationDetail', { title: vacation.title, vacation, widgets: widgets === null ? [] : widgets, userId, vacationUser });
+    } catch (err) {
+        console.error(err);
+        req.flash('error', 'There was an error getting this vacation.');
+        res.redirect('/community');
     }
 });
 
@@ -79,4 +97,50 @@ router.post('/:id/delete', requireLogin, async (req, res) => {
     }
 });
 
+router.post('/:vacationId/widgets', requireLogin, async (req, res) => {
+    const { vacationId } = req.params;
+    const { title, type, content, external_url } = req.body;
+
+    try {
+        const result = await createWidget(vacationId, title, type, content, external_url);
+        res.redirect(`/vacations/${vacationId}`);
+        req.flash('success', 'Widget created successfully');
+    } catch (err) {
+        console.error('Error in POST:', err.message);
+        req.flash('error', ' Error creating widget');
+        res.status(500).send('Server error creating widget');
+    }
+});
+
+router.put('/widgets/:widgetId', requireLogin, async (req, res) => {
+    const { widgetId } = req.params;
+    const { title, type, content, external_url } = req.body;
+
+    try {
+        const result = await updateWidget(widgetId, title, type, content, external_url);
+        console.log(result);
+        req.flash('success', 'Widget updated successfully');
+        res.redirect(`/vacations/${result.vacation_id}`);
+    } catch (err) {
+        console.error('Error in PUT /widgets/:widgetId:', err.message);
+        req.flash('error', ' Error editing widget');
+        res.status(500).send('Server error editing widget');
+    }
+});
+
+router.delete('/widgets/:widgetId', requireLogin, async (req, res) => {
+    const widgetId = req.params.widgetId;
+
+    try {
+        const widget = await getWidgetById(widgetId);
+        const vacationId = widget.vacation_id;
+        const deletedWidget = await deleteWidget(widgetId);
+        req.flash('success', 'Widget Deleted');
+        res.redirect(`/vacations/${vacationId}`);
+    } catch (err) {
+        console.error('Error deleting widget:', err.message);
+        req.flash('error', 'Error Deleting Widget');
+        res.status(500).send('Server error deleting widget');
+    }
+});
 export default router;
