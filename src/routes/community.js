@@ -1,7 +1,7 @@
 import express from 'express';
 import { getAllVacationByUserId } from '../models/vacation.js';
 import { requireLogin } from '../middleware/auth.js';
-import { getAllCommunityRequestsByStatus, submitCommunityRequest } from '../models/communityRequest.js';
+import { getAllCommunityRequestsByStatus, getAllCommunityRequestsByUserId, submitCommunityRequest } from '../models/communityRequest.js';
 import { getAllHeadlines } from '../models/headline.js';
 
 const router = express.Router();
@@ -47,6 +47,12 @@ router.post('/submit', requireLogin, async (req, res) => {
     }
 
     res.redirect('/community/submit');
+});
+
+router.get("/my-submissions", requireLogin, async (req, res) => {
+    const title = "My Community Submission History";
+    const vacations = await getAllCommunityRequestsByUserId(req.session.user.user_id);
+    res.render("community/statusHistory", { title, vacations });
 });
 
 export default router;

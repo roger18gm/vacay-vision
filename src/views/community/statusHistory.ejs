@@ -1,0 +1,28 @@
+<%- include('../partials/header') %>
+<main>
+  <h1><%- title %></h1>
+  <% vacations.forEach(v => { %>
+  <article class="vacation-card">
+    <h2><%= v.title %></h2>
+    <p><strong>Destination:</strong> <%= v.destination %></p>
+    <p><strong>Status:</strong> <%= v.status %></p>
+    <p><strong>Date Submitted:</strong> <%= v.submitted_at %></p>
+    <% if (v.status === 'rejected') { %>
+    <p><strong>Reviewed By:</strong> <%= v.reviewer %></p>
+    <p><strong>Date Reviewed:</strong> <%= v.reviewed_at %></p>
+    <p><strong>Rejection Reason:</strong> <%= v.rejection_reason %></p>
+    <% } %> <% if( v.status === 'approved') { %>
+    <p><strong>Reviewed By:</strong> <%= v.reviewer %></p>
+    <p><strong>Date Reviewed:</strong> <%= v.reviewed_at %></p>
+    <% } %>
+
+    <p><%= v.description %></p>
+    <img
+      src="<%= v.image_url %>"
+      alt="Image of <%= v.title %>"
+      style="max-width: 300px"
+    />
+  </article>
+  <% }) %>
+</main>
+<%- include('../partials/footer') %>

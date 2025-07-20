@@ -51,7 +51,7 @@ async function getVacationById(id) {
 async function getAllVacationByUserId(userId) {
     try {
         const query = `
-            SELECT v.vacation_id, v.title, v.destination, v.description, v.image_url
+            SELECT v.vacation_id, v.title, v.destination, v.description, v.image_url, v.created_at
             FROM vacations v
             WHERE v.user_id = $1;
         `;

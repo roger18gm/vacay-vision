@@ -10,11 +10,47 @@
     </form>
   </div>
 
+  <div>
+    <h2>Edit User Roles</h2>
+    <div>
+      <form method="GET" action="/dashboard/find-user">
+        <input
+          type="text"
+          name="username"
+          placeholder="Search user by username"
+          required
+        />
+        <button type="submit">Search</button>
+      </form>
+
+      <% if (foundUser) { %>
+      <form
+        method="POST"
+        action="/dashboard/<%= foundUser.user_id %>/role?_method=PUT"
+      >
+        <p>
+          <strong>Username:</strong> <%= foundUser.username %><br />
+          <strong>Current Role:</strong> <%= foundUser.role_name %>
+        </p>
+
+        <label for="role">New Role:</label>
+        <select name="role" required>
+          <option value="">-- Select Role --</option>
+          <option value="user">User</option>
+          <option value="moderator">Moderator</option>
+          <option value="admin">Admin</option>
+        </select>
+
+        <button type="submit">Update Role</button>
+      </form>
+      <% } %>
+    </div>
+  </div>
+
+  <h2>Pending Submissions</h2>
   <% if (pending.length === 0) { %>
   <p>No pending submissions.</p>
-  <% } else { %>
-  <h2>Pending Submissions</h2>
-  <% pending.forEach(pend => { %>
+  <% } else { %> <% pending.forEach(pend => { %>
   <div class="vacation-card">
     <h3><%= pend.title %> – by <%= pend.username %></h3>
     <p><strong>Destination:</strong> <%= pend.destination %></p>
@@ -40,8 +76,12 @@
   <h2>Rejected Submissions</h2>
   <% rejected.forEach(rej => { %>
   <div class="vacation-card">
-    <h3><%= rej.title %> – by <%= rej.username %></h3>
+    <h3><%= rej.title %> – Submitted by <%= rej.username %></h3>
+    <p><strong>Reviewed By:</strong> <%= rej.reviewer %></p>
+    <p><strong>Date Submitted:</strong> <%= rej.submitted_at %></p>
+    <p><strong>Date Reviewed:</strong> <%= rej.reviewed_at %></p>
     <p><strong>Destination:</strong> <%= rej.destination %></p>
+    <p><strong>Rejection Reason:</strong> <%= rej.rejection_reason %></p>
     <p><%= rej.description %></p>
     <img src="<%= rej.image_url %>" style="max-width: 300px" /><br />
   </div>

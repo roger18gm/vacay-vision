@@ -4,28 +4,44 @@
 
   <section>
     <h3>Account Info</h3>
-    <p><strong>Email:</strong> <%= user.email %></p>
     <p><strong>Role:</strong> <%= user.role_name %></p>
     <p><strong>Bio:</strong> <%= user.bio %></p>
     <p><strong>Member Since:</strong> <%= user.created_at.toDateString() %></p>
+    <p><strong>Total Vacations</strong> <%= vacays.length %></p>
   </section>
 
   <% if (isOwnProfile) { %>
   <section>
     <h3>Quick Actions</h3>
     <ul>
+      <p><strong>Email:</strong> <%= user.email %></p>
+      <li>
+        <form method="POST" action="">
+          <button type="submit">Edit Profile Information</button>
+        </form>
+      </li>
+      <li>
+        <a href="/community/my-submissions"
+          >View Community Submission History</a
+        >
+      </li>
       <li><a href="/vacations/new">Create New Vacation</a></li>
       <% if (currentUser.user_id === 2) { %>
       <li><a href="/dashboard">Moderation Panel</a></li>
       <% } %>
 
-      <li><a href="">Delete Account</a></li>
+      <li>
+        <form method="POST" action="">
+          <button type="submit">Delete My Profile</button>
+        </form>
+      </li>
+      <li>
+        <form method="POST" action="/auth/logout">
+          <button type="submit">Logout</button>
+        </form>
+      </li>
     </ul>
   </section>
-
-  <form method="POST" action="/auth/logout">
-    <button type="submit">Logout</button>
-  </form>
 
   <section>
     <h3>Feedback</h3>
@@ -47,11 +63,14 @@
   <% } %>
 
   <section>
-    <h3><%= isOwnProfile ? "Your" : user.username + "'s" %> Vacations</h3>
+    <h3>
+      <%= isOwnProfile ? "Your" : user.username + "'s" %> Vacation Vision Board
+    </h3>
     <% vacays.forEach(v => { %>
     <div class="vacation-card">
-      <h2><%= v.title %></h2>
+      <h3><a href="/vacations/<%= v.vacation_id %>"><%= v.title %> </a></h3>
       <p><strong>Destination:</strong> <%= v.destination %></p>
+      <p><strong>Created: </strong> <%= v.created_at %></p>
       <p><%= v.description %></p>
       <% if (v.image_url && v.image_url.match(/^https?:\/\/|^\/images\//)) { %>
       <img
@@ -67,5 +86,12 @@
     </div>
     <% }) %>
   </section>
+
+  <% if (isOwnProfile) { %>
+  <section>
+    <h2>Your Favorite Vacations</h2>
+    <p>Coming soon...</p>
+  </section>
+  <% } %>
 </main>
 <%- include('../partials/footer') %>
