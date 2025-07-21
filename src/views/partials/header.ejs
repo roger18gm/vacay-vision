@@ -47,4 +47,24 @@
       </nav>
     </header>
   </body>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const flashMessages = document.querySelectorAll(".flash-message");
+
+      flashMessages.forEach((message) => {
+        // After 3 seconds, start fading out
+        setTimeout(() => {
+          message.classList.add("fade-out");
+        }, 3000); // Adjust this time (in milliseconds) before fading starts
+
+        // After the fade-out transition completes, remove the element
+        message.addEventListener("transitionend", () => {
+          // Check if the opacity has reached 0 (meaning it has faded out)
+          if (window.getComputedStyle(message).opacity === "0") {
+            message.remove();
+          }
+        });
+      });
+    });
+  </script>
 </html>

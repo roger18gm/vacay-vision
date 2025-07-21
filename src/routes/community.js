@@ -24,7 +24,7 @@ router.get("/submit", requireLogin, async (req, res) => {
     const vacations = await getAllVacationByUserId(req.session.user.user_id);
     const step = req.query.step || 'select'; // default to step-1 if not provided
     const selectedVacationId = req.query.vacationId;
-    res.render("community/vacay-submit", { title, vacations, step, selectedVacationId });
+    res.render("community/submissionRequest", { title, vacations, step, selectedVacationId });
 });
 
 // Final submission POST

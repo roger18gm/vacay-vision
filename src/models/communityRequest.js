@@ -24,7 +24,7 @@ export const getAllCommunityRequestsByStatus = async (status) => {
             FROM community_requests cr
             JOIN vacations v ON cr.vacation_id = v.vacation_id
             JOIN users u ON cr.user_id = u.user_id
-            JOIN users ru ON cr.reviewed_by = ru.user_id 
+            LEFT JOIN users ru ON cr.reviewed_by = ru.user_id 
             WHERE cr.status = $1
             ORDER BY cr.submitted_at DESC;
         `;
@@ -46,7 +46,7 @@ export const getAllCommunityRequestsByUserId = async (status) => {
             FROM community_requests cr
             JOIN vacations v ON cr.vacation_id = v.vacation_id
             JOIN users u ON cr.user_id = u.user_id
-            JOIN users ru ON cr.reviewed_by = ru.user_id 
+            LEFT JOIN users ru ON cr.reviewed_by = ru.user_id 
             WHERE cr.user_id = $1
             ORDER BY cr.submitted_at DESC;
         `;

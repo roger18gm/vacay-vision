@@ -1,5 +1,7 @@
 # VacayVision
 
+Published URL: https://vacay-vision.onrender.com/
+
 ## Visualize Your Dream Vacation, Together!
 
 VacayVision is a web application designed to help users visualize and plan their dream vacations, even if they don't know where to start. It provides a platform for users to create personalized vacation "widgets" (HTML div cards) where they can input details like desired locations, essential items to bring, and must-visit hotspots. The core idea is to foster a community where travelers can share their dream itineraries, inspire others, and make travel planning a collaborative and easy experience.

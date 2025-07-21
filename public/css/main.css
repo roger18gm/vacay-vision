@@ -3,76 +3,152 @@
 /* Google Fonts - Inter */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
+:root{
+    --light-green:   #bad9bf;
+    --green: #347471;
+    --dark-green: #347471;
+    --sand-yellow: #f9cf85;
+    --beige: #fbe2af;
+    --clay-orange: #c75f3d ;
+    --mud-brown: #635140 ;
+}
+
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', Arial, sans-serif;
     background-color: #f8fafc; /* Light gray background */
     color: #374151; /* Default text color */
     margin: 0;
+    padding: 0;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    display: flex; /* Added for sticky footer layout */
+    flex-direction: column; /* Added for sticky footer layout */
+    min-height: 100vh; /* Added for sticky footer layout */
 }
 
-/* Header Styles */
-.main-header {
-    background-color: #1f2937; /* Dark background for header */
-    color: #e5e7eb; /* Light gray text */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Navigation Styles */
-.main-nav ul {
+/* Main Content Area */
+main {
+    flex-grow: 1; /* Allows main content to take up available space */
+    padding: 20px;
     display: flex;
-    justify-content: center; /* Center the nav items */
-    align-items: center;
-    padding: 1rem 0;
-    list-style: none;
-    margin: 0 auto; /* Center the nav bar */
-    max-width: 1200px; /* Max width for content */
-    padding-left: 1rem;
-    padding-right: 1rem;
-    gap: 1.5rem; /* Space between nav items */
+    flex-direction: column;
+    align-items: center; /* Center content horizontally */
+    justify-content: center; /* Center content vertically if enough space */
+    width: 100%;
+    box-sizing: border-box; /* Include padding in width calculation */
 }
 
-.main-nav ul li a,
-.main-nav ul li button {
-    color: #e5e7eb; /* Light gray text */
-    text-decoration: none;
-    font-weight: 600;
-    padding: 0.5rem 1rem;
-    border-radius: 0.375rem;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: inherit;
-    font-family: inherit;
-}
-
-.main-nav ul li a:hover,
-.main-nav ul li button:hover {
-    background-color: #4b5563; /* Darker gray on hover */
-    color: #a5b4fc; /* Indigo-400 equivalent */
-}
-
-/* Flash message styling */
-.flash-message {
-    padding: 1rem;
-    margin: 1rem auto;
-    border-radius: 0.5rem;
+main h1 {
+    color: #333;
+    margin-bottom: 20px;
     text-align: center;
-    font-weight: 600;
-    max-width: 90%;
+}
+/* Header Styles */
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 1em 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.flash-message.success {
-    background-color: #d1fae5;
-    color: #065f46;
+/* Navigation Bar Styles */
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex; /* Makes list items display in a row */
+    justify-content: center; /* Centers the navigation links */
+    align-items: center;
 }
 
-.flash-message.error {
-    background-color: #fee2e2;
-    color: #991b1b;
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: #575757;
+}
+
+/* Logout Button within Navigation */
+.nav-logout-btn {
+    background-color: #dc3545; /* Red color for logout */
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease;
+}
+
+.nav-logout-btn:hover {
+    background-color: #c82333;
+}
+
+/*
+---
+*/
+
+/* Flash Message Container */
+.flash-messages {
+    position: fixed; /* Positions the flash messages relative to the viewport */
+    top: 20px; /* Distance from the top */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Adjust for perfect centering */
+    z-index: 1000; /* Ensures it's on top of other content */
+    width: 90%; /* Adjust width as needed */
+    max-width: 500px; /* Maximum width for larger screens */
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between multiple messages */
+}
+
+/* Individual Flash Message Styles */
+.flash-message {
+    padding: 15px 20px;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: bold;
+    color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    opacity: 1; /* Start fully opaque */
+    transition: opacity 0.5s ease-in-out; /* Smooth transition for fading */
+}
+
+.flash-message p {
+    margin: 0; /* Remove default paragraph margin */
+}
+
+/* Flash Message Types */
+.flash-success {
+    background-color: #28a745; /* Green for success */
+}
+
+.flash-error {
+    background-color: #dc3545; /* Red for error */
+}
+
+.flash-warning {
+    background-color: #ffc107; /* Yellow for warning */
+    color: #333; /* Darker text for warning */
+}
+
+.flash-info {
+    background-color: #17a2b8; /* Blue for info */
+}
+
+/* Class to be added by JavaScript for fading out */
+.flash-message.fade-out {
+    opacity: 0;
 }
 
 /* Banner Section */
@@ -93,28 +169,26 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.4) 100%);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    padding: 1rem;
 }
 
 .banner-title {
     font-size: 3rem; /* text-5xl */
     font-weight: 800; /* font-extrabold */
     color: #fff;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* drop-shadow-lg */
-    margin-bottom: 1rem;
+    text-shadow: 6px 6px 4px rgba(0, 0, 0, 0.5); /* drop-shadow-lg */
+    margin-bottom: 0rem;
 }
 
 .banner-subtitle {
     font-size: 1.25rem; /* text-xl */
     color: #fff;
     font-weight: 500; /* font-medium */
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* drop-shadow-md */
+    text-shadow: 4px 4px 4px rgba(0, 0, 0, 0.5); /* drop-shadow-md */
 }
 
 /* Main Content Container */
@@ -207,16 +281,1068 @@ body {
     transform: scale(1.05);
 }
 
-/* Footer Section */
-.main-footer {
-    background-color: #1f2937; /* gray-800 */
+/* Register Form Styles */
+.register-form {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* Max width for the form */
+    box-sizing: border-box;
+    margin-top: 20px; /* Space from the H1 */
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block; /* Make label take full width */
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+.form-group input[type="email"],
+.form-group input[type="username"],
+.form-group input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box; /* Include padding in width */
+    font-size: 1em;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input[type="email"]:focus,
+.form-group input[type="username"]:focus,
+.form-group input[type="password"]:focus {
+    border-color: #007bff; /* Highlight on focus */
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+.form-group small {
+    display: block;
+    margin-top: 5px;
+    color: #777;
+    font-size: 0.85em;
+}
+
+.form-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px; /* Space between button and link */
+    margin-top: 25px;
+}
+
+.form-actions button[type="submit"] {
+    background-color: #007bff; /* Primary blue button */
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%; /* Full width button */
+    max-width: 250px; /* Max width for the button */
+}
+
+.form-actions button[type="submit"]:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px); /* Slight lift effect */
+}
+
+.secondary-link {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 0.95em;
+    transition: color 0.3s ease;
+}
+
+.secondary-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Profile Page Specific Styles */
+
+/* General Section Styling */
+.general-section {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 800px; /* Limit width for all sections */
+    box-sizing: border-box;
+}
+
+
+
+/* Account Info Section */
+.general-section p {
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.general-section p strong {
+    color: #555;
+    margin-right: 5px;
+}
+
+/* Quick Actions Section */
+.quick-actions {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 800px; /* Limit width for all sections */
+    box-sizing: border-box;
+}
+
+.quick-actions ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.quick-actions li {
+    margin-bottom: 10px;
+    display: flex; /* Use flex for button/link alignment */
+    align-items: center;
+}
+
+.quick-actions li form,
+.quick-actions li a {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.quick-actions li button,
+.quick-actions li a {
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.quick-actions li button[type="submit"] {
+    background-color: #6c757d; /* Grey for general actions */
+    color: #fff;
+    border: none;
+}
+
+.quick-actions li button[type="submit"]:hover {
+    background-color: #5a6268;
+}
+
+/* Specific button overrides for quick actions */
+.quick-actions li form[action="/auth/logout"] button {
+    background-color: #dc3545; /* Red for Logout */
+}
+
+.quick-actions li form[action="/auth/logout"] button:hover {
+    background-color: #c82333;
+}
+
+.quick-actions li form[action=""] button:last-of-type { /* Delete profile button */
+    background-color: #dc3545;
+}
+
+.quick-actions li form[action=""] button:last-of-type:hover { /* Delete profile button hover */
+    background-color: #c82333;
+}
+
+.quick-actions li a {
+    background-color: #17a2b8; /* Info blue for links */
+    color: #fff;
+}
+
+.quick-actions li a:hover {
+    background-color: #138496;
+}
+
+.quick-actions li a[href="/vacations/new"] {
+    background-color: #28a745; /* Green for create new vacation */
+}
+
+.quick-actions li a[href="/vacations/new"]:hover {
+    background-color: #218838;
+}
+
+.quick-actions li a[href="/dashboard"] {
+    background-color: #ffc107; /* Warning yellow for admin dashboard */
+    color: #333;
+}
+
+.quick-actions li a[href="/dashboard"]:hover {
+    background-color: #e0a800;
+}
+
+
+/* Feedback Section */
+.feedback-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.feedback-form label {
+    display: flex; /* Align radio button and text */
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.feedback-form input[type="radio"] {
+    margin-right: 10px;
+    transform: scale(1.2); /* Slightly larger radio buttons */
+}
+
+.feedback-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 1em;
+    min-height: 80px;
+    resize: vertical;
+}
+
+.feedback-form textarea:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+.feedback-form button[type="submit"] {
+    align-self: flex-end; /* Align button to the right */
+    background-color: #007bff; /* Primary blue for send */
+    color: #fff;
+    padding: 10px 25px;
+}
+
+.feedback-form button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Vacation Card within Profile (adjusting from previous definition) */
+/* Reset text alignment for profile page's vacation cards */
+main section .vacation-card {
+    text-align: left; /* Align text left within profile vacation cards */
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 600px; /* Slightly smaller max-width for nested cards */
+    margin-top: 20px;
+}
+
+main section .vacation-card h3 a {
+    color: var(--clay-orange);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+main section .vacation-card h3 a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* Specific style for invalid image URL message */
+.vacation-card p em {
+    color: #dc3545; /* Red for error messages */
+    font-style: normal;
+    font-weight: bold;
+}
+
+/*
+---
+*/
+.section-box-header {
+    color: #333;
+    font-size: 1.6em;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+/* Vacation Detail Specific Styles */
+
+.vacation-card {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 800px; /* Limit width of vacation card */
+    box-sizing: border-box;
+    text-align: center; /* Center content within the card */
+}
+
+.vacation-card h2 {
+    color: #4CAF50; /* Green for user details */
+    margin-top: 0;
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.vacation-card h2 strong {
+    color: #333; /* Darker for the actual username */
+}
+
+.vacation-card p {
+    line-height: 1.6;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+.vacation-card img {
+    max-width: 100%; /* Make image responsive */
+    height: auto;
+    border-radius: 8px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.vacation-card a {
+    display: inline-block; /* Allow padding and margin */
+    background-color: var(--light-green);
+    color: var(--mud-brown) ;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-top: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.vacation-card a:hover {
+    background-color: var(--dark-green);
+}
+
+/* General Button Styles */
+button {
+    background-color: #007bff; /* Primary blue */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 5px; /* Space between buttons */
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+}
+
+/* Add Widget Form */
+#add-widget-form {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    margin-top: 20px;
+    width: 100%;
+    max-width: 600px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#add-widget-form label {
+    font-weight: bold;
+    color: #555;
+    margin-bottom: -10px; /* Pull label closer to input */
+}
+
+#add-widget-form input[type="text"],
+#add-widget-form input[type="url"],
+#add-widget-form select,
+#add-widget-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+#add-widget-form input:focus,
+#add-widget-form select:focus,
+#add-widget-form textarea:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+/* Widget Card Styles */
+.widget-card {
+    background-color: #e9ecef; /* Light grey background */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    margin-top: 20px;
+    width: 100%;
+    max-width: 700px;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.widget-card h2 {
+    color: #343a40; /* Darker text for widget title */
+    font-size: 1.3em;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.widget-card p {
+    font-size: 1em;
+    line-height: 1.5;
+    margin-bottom: 8px;
+}
+
+.widget-card strong {
+    color: #555;
+}
+
+.widget-card a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.widget-card a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.widget-card button {
+    margin-right: 10px; /* Space between widget buttons */
+    background-color: #ffc107; /* Warning yellow for edit */
+    color: #333;
+    padding: 8px 15px;
+    font-size: 0.9em;
+}
+
+.widget-card button:hover {
+    background-color: #e0a800;
+}
+
+.widget-card form button[type="submit"] {
+    background-color: #dc3545; /* Red for delete */
+    color: #fff;
+}
+
+.widget-card form button[type="submit"]:hover {
+    background-color: #c82333;
+}
+
+/* Widget Edit Forms */
+.widget-card form[id^="edit-form-"] {
+    background-color: #f8f9fa; /* Lighter background for edit form */
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #eee;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.widget-card form[id^="edit-form-"] label {
+    font-weight: bold;
+    color: #555;
+}
+
+.widget-card form[id^="edit-form-"] input,
+.widget-card form[id^="edit-form-"] select,
+.widget-card form[id^="edit-form-"] textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 0.95em;
+}
+
+.widget-card form[id^="edit-form-"] button {
+    background-color: #28a745; /* Success green for update */
+    color: #fff;
+    align-self: flex-start; /* Align button to start of flex container */
+    margin-top: 10px;
+}
+
+.widget-card form[id^="edit-form-"] button:hover {
+    background-color: #218838;
+}
+
+/* Comments Section */
+.comments {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+    width: 100%;
+    max-width: 800px;
+    box-sizing: border-box;
+}
+
+.comments h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+}
+
+.comments ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.comments ul li {
+    background-color: #f8f9fa; /* Light background for individual comments */
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #eee;
+}
+
+.comments ul li strong {
+    color: #007bff; /* Blue for username */
+    font-size: 1.1em;
+}
+
+.comments ul li p {
+    margin: 8px 0;
+    line-height: 1.5;
+}
+
+.comments ul li small {
+    color: #777;
+    font-size: 0.85em;
+}
+
+.comments form {
+    margin-top: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.comments form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 1em;
+    resize: vertical; /* Allow vertical resizing */
+}
+
+.comments form textarea:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+.comments form button[type="submit"] {
+    align-self: flex-end; /* Align button to the right */
+    background-color: #28a745; /* Green for post comment button */
+    color: #fff;
+    padding: 10px 25px;
+}
+
+.comments form button[type="submit"]:hover {
+    background-color: #218838;
+}
+
+/* Community Submission Page Styles */
+
+/* General container for each step */
+.step-one,
+.step-two,
+.step-three {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    margin-top: 30px;
+    width: 100%;
+    max-width: 600px; /* Max width for submission steps */
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.step-one h2,
+.step-two h2,
+.step-three h2 {
+    color: #333;
+    font-size: 1.8em;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+/* Step 1: Choose Vacation */
+.step-one form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align labels to the left */
+    gap: 15px;
+    padding: 0 20px; /* Add some horizontal padding for the content */
+}
+
+.step-one label {
+    display: flex; /* Makes radio button and text align */
+    align-items: center;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.step-one label:hover {
+    color: #007bff;
+}
+
+.step-one input[type="radio"] {
+    margin-right: 12px;
+    transform: scale(1.3); /* Slightly larger radio buttons */
+}
+
+.step-one strong {
+    color: #555;
+}
+
+.step-one button[type="submit"] {
+    margin-top: 20px;
+    align-self: center; /* Center the button in the form */
+    padding: 12px 30px;
+    font-size: 1.1em;
+    background-color: #007bff; /* Primary blue button */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.step-one button[type="submit"]:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+/* Step 2: Confirm Submission */
+.step-two p {
+    line-height: 1.6;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+    text-align: left; /* Align text left within confirmation */
+}
+
+.step-two p strong {
+    color: #333;
+}
+
+.step-two img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 15px 0 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.step-two form {
+    margin-bottom: 15px; /* Space between submit form and go back link */
+}
+
+.step-two button {
+    padding: 12px 30px;
+    font-size: 1.1em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.step-two form button[type="submit"] {
+    background-color: #28a745; /* Green for submit review button */
+    color: #fff;
+    border: none;
+    margin-right: 10px; /* Space from 'Go Back' button */
+}
+
+.step-two form button[type="submit"]:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+.step-two a button { /* Style for the 'Go Back' button which is an anchor with a button inside */
+    background-color: #6c757d; /* Grey for go back button */
+    color: #fff;
+    border: none;
+}
+
+.step-two a button:hover {
+    background-color: #5a6268;
+    transform: translateY(-2px);
+}
+
+/* Step 3: Done! */
+.step-three p {
+    font-size: 1.2em;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.step-three a button { /* Style for the 'Go to Community' button */
+    background-color: #007bff; /* Primary blue */
+    color: #fff;
+    border: none;
+    padding: 12px 30px;
+    font-size: 1.1em;
+}
+
+.step-three a button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+/* Admin Dashboard Specific Styles */
+
+/* Global Headline Form */
+.headline-form {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 600px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.headline-form h2 {
+    color: #333;
+    font-size: 1.6em;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.headline-form form {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+    justify-content: center; /* Center items horizontally */
+    gap: 15px;
+}
+
+.headline-form input[type="text"] {
+    flex-grow: 1; /* Allows input to take up available space */
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 1em;
+    max-width: 70%; /* Limit width of input */
+}
+
+.headline-form input[type="text"]:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+.headline-form button[type="submit"] {
+    background-color: #28a745; /* Green for submission */
+    color: #fff;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.headline-form button[type="submit"]:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+/* Edit User Role Form */
+.edit-user-role-form {
+    background-color: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 600px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.edit-user-role-form h2 {
+    color: #333;
+    font-size: 1.6em;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.edit-user-role-form > div { /* Container for search and update forms */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center forms */
+    gap: 25px; /* Space between search and update forms */
+}
+
+.edit-user-role-form form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.edit-user-role-form form input[type="text"] {
+    width: 80%; /* Width for search input */
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+.edit-user-role-form form input[type="text"]:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+.edit-user-role-form form button[type="submit"] {
+    background-color: #007bff; /* Blue for search/update */
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.edit-user-role-form form button[type="submit"]:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+}
+
+.edit-user-role-form p {
+    font-size: 1.1em;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.edit-user-role-form label {
+    font-weight: bold;
+    color: #555;
+    margin-bottom: 5px;
+}
+
+.edit-user-role-form select {
+    width: 80%; /* Width for select dropdown */
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 1em;
+    background-color: #f8f8f8;
+}
+
+.edit-user-role-form select:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+/* Vacation Cards within Admin Dashboard (Pending/Rejected) */
+/* Re-using and slightly adjusting .vacation-card styles */
+main .vacation-card { /* Target vacation cards directly within main for general styling */
+    text-align: left; /* Default to left alignment for pending/rejected lists */
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 700px; /* Slightly larger max-width for these cards */
+    margin-top: 20px;
+    margin-bottom: 20px; /* Adjust spacing */
+}
+
+main .vacation-card h3 {
+    font-size: 1.4em;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+main .vacation-card form {
+    display: inline-block; /* Make forms inline for horizontal buttons */
+    margin-right: 10px; /* Space between forms/buttons */
+}
+
+main .vacation-card form button[type="submit"] {
+    padding: 8px 18px;
+    font-size: 0.95em;
+    margin: 0; /* Reset margin from general button style */
+}
+
+/* Specific button colors for Approve/Reject */
+main .vacation-card form[action*="/approve"] button {
+    background-color: #28a745; /* Green for approve */
+}
+
+main .vacation-card form[action*="/approve"] button:hover {
+    background-color: #218838;
+}
+
+main .vacation-card form[action*="/reject"] button {
+    background-color: #dc3545; /* Red for reject */
+}
+
+main .vacation-card form[action*="/reject"] button:hover {
+    background-color: #c82333;
+}
+
+main .vacation-card form[action*="/reject"] input[type="text"] {
+    width: 200px; /* Adjust width for rejection reason input */
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 0.9em;
+    margin-right: 10px; /* Space between input and button */
+    display: inline-block; /* Keep it inline with button */
+}
+
+main .vacation-card form[action*="/reject"] input[type="text"]:focus {
+    border-color: #dc3545; /* Highlight with red on focus */
+    outline: none;
+    box-shadow: 0 0 5px rgba(220, 53, 69, 0.2);
+}
+
+/* Styling for pending/rejected messages */
+main > p { /* Targets "No pending submissions." etc. */
+    font-size: 1.1em;
+    color: #555;
+    text-align: center;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+/* Community Page Specific Styles */
+
+/* Horizon Headlines Banner */
+.horizon-headlines-banner {
+    background-color: #e6f7ff; /* Light blue background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 800px; /* Limit width */
+    box-sizing: border-box;
+    text-align: center;
+    max-height: 250px; /* Set a maximum height for the banner */
+    overflow-y: auto; /* Enable vertical scrolling if content overflows */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    border: 1px solid #cceeff; /* Light blue border */
+}
+
+.horizon-headlines-banner h2 {
+    color: #0056b3; /* Darker blue for heading */
+    font-size: 1.8em;
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #b3e0ff; /* Light blue border below heading */
+    padding-bottom: 10px;
+}
+
+.horizon-headlines-banner p {
+    color: #555;
+    font-style: italic;
+    margin-bottom: 15px;
+}
+
+/* Individual Headline Card */
+.headline-card {
+    background-color: #fff;
+    padding: 15px 20px;
+    border-radius: 8px;
+    margin-bottom: 15px; /* Space between headlines */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f0f0f0;
+    text-align: left; /* Align text within cards to the left */
+}
+
+.headline-card h3 {
+    color: #333;
+    font-size: 1.1em;
+    margin-top: 0;
+    margin-bottom: 5px;
+    line-height: 1.4;
+}
+
+.headline-card p {
+    color: #777;
+    font-size: 0.9em;
+    margin: 0;
+    font-style: normal; /* Override italic from parent */
+}
+/* Utility Class
+.hidden {
+    display: none;
+} */
+
+
+/* Footer Styles */
+footer {
+    background-color: #333;
     color: #fff;
     text-align: center;
-    padding: 1.5rem; /* p-6 */
-    margin-top: 2.5rem; /* mt-10 */
-    border-top-left-radius: 0.5rem; /* rounded-t-lg */
-    border-top-right-radius: 0.5rem; /* rounded-t-lg */
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06); /* shadow-inner */
+    padding: 1em 0;
+    margin-top: auto; /* Pushes the footer to the bottom */
+    width: 100%;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+}
+
+footer p {
+    margin: 5px 0;
+    font-size: 0.9em;
+}
+
+footer a {
+    color: #4CAF50; /* A pleasant green for links */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #66BB6A;
 }
 
 /* Responsive Adjustments */

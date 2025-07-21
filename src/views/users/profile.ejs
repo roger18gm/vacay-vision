@@ -2,8 +2,8 @@
 <main>
   <h1><%= title %></h1>
 
-  <section>
-    <h3>Account Info</h3>
+  <section class="general-section">
+    <h3 class="section-box-header">Account Info</h3>
     <p><strong>Role:</strong> <%= user.role_name %></p>
     <p><strong>Bio:</strong> <%= user.bio %></p>
     <p><strong>Member Since:</strong> <%= user.created_at.toDateString() %></p>
@@ -11,8 +11,8 @@
   </section>
 
   <% if (isOwnProfile) { %>
-  <section>
-    <h3>Quick Actions</h3>
+  <section class="quick-actions">
+    <h3 class="section-box-header">Quick Actions</h3>
     <ul>
       <p><strong>Email:</strong> <%= user.email %></p>
       <li>
@@ -43,7 +43,7 @@
     </ul>
   </section>
 
-  <section>
+  <section class="feedback-form general-section">
     <h3>Feedback</h3>
     <form method="POST" action="/users/user/<%= currentUser.user_id %>">
       <% types.forEach(t => { %>
@@ -62,8 +62,8 @@
   </section>
   <% } %>
 
-  <section>
-    <h3>
+  <section class="general-section">
+    <h3 class="section-box-header">
       <%= isOwnProfile ? "Your" : user.username + "'s" %> Vacation Vision Board
     </h3>
     <% vacays.forEach(v => { %>
@@ -79,7 +79,7 @@
         style="max-width: 300px"
       />
       <% } else { %>
-      <p style="color: orange"><em>Invalid or missing image URL</em></p>
+      <p class="invalid-image-url"><em>Invalid or missing image URL</em></p>
       <% } %> <% if (isOwnProfile) { %>
       <a href="/vacation/<%= v.vacation_id %>/edit">Edit</a>
       <% } %>

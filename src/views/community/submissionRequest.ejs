@@ -1,0 +1,58 @@
+<%- include('../partials/header') %>
+<main>
+  <h1><%= title %></h1>
+  <% if (step === 'select') { %>
+  <div class="step-one">
+    <h2>Step 1: Choose Vacation</h2>
+    <form method="GET" action="/community/submit">
+      <input type="hidden" name="step" value="confirm" />
+      <% vacations.forEach(v => { %>
+      <label>
+        <input
+          type="radio"
+          name="vacationId"
+          value="<%= v.vacation_id %>"
+          required
+        />
+        <strong><%= v.title %></strong> – <%= v.destination %> </label
+      ><br />
+      <% }) %>
+      <button type="submit">Next</button>
+    </form>
+  </div>
+
+  <% } else if (step === 'confirm') { const selected = vacations.find(v =>
+  v.vacation_id == selectedVacationId); %>
+  <div class="step-two">
+    <h2>Step 2: Confirm Submission</h2>
+    <p>
+      <strong>Vacation:</strong> <%= selected.title %> (<%= selected.destination
+      %>)
+    </p>
+    <p><%= selected.description %></p>
+    <img
+      src="<%= selected.image_url %>"
+      alt=""
+      style="max-width: 300px"
+    /><br />
+
+    <form method="POST" action="/community/submit?step=submit">
+      <input
+        type="hidden"
+        name="vacationId"
+        value="<%= selected.vacation_id %>"
+      />
+      <button type="submit">Submit for Review</button>
+    </form>
+    <a href="/community/submit?step=select"><button>Go Back</button></a>
+  </div>
+
+  <% } else if (step === 'submitted') { %>
+  <div class="step-three">
+    <h2>Step 3: Done!</h2>
+    <p>Your vacation has been submitted for community review.</p>
+    <a href="/community"><button>Go to Community</button></a>
+    <% } %>
+  </div>
+</main>
+<%- include('../partials/footer') %>
