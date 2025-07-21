@@ -1313,6 +1313,87 @@ main > p { /* Targets "No pending submissions." etc. */
     margin: 0;
     font-style: normal; /* Override italic from parent */
 }
+
+/* New Vacation Form Styles */
+.new-vacation-form {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 700px; /* Adjust max-width as appropriate for form content */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between form groups */
+}
+
+.new-vacation-form h2 {
+    color: #333;
+    font-size: 1.8em;
+    margin-top: 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+    text-align: center;
+}
+
+.new-vacation-form .form-group {
+    margin-bottom: 0; /* Override default form-group margin as gap is used */
+}
+
+.new-vacation-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+}
+
+.new-vacation-form input[type="text"],
+.new-vacation-form input[type="url"],
+.new-vacation-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 1em;
+    transition: border-color 0.3s ease;
+}
+
+.new-vacation-form input[type="text"]:focus,
+.new-vacation-form input[type="url"]:focus,
+.new-vacation-form textarea:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+}
+
+.new-vacation-form textarea {
+    min-height: 100px; /* Give textarea a decent height */
+    resize: vertical; /* Allow vertical resizing */
+}
+
+.new-vacation-form button[type="submit"] {
+    align-self: flex-end; /* Align button to the right */
+    background-color: #28a745; /* Green for submission */
+    color: #fff;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 10px; /* Add some space above the button */
+}
+
+.new-vacation-form button[type="submit"]:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
 /* Utility Class
 .hidden {
     display: none;
