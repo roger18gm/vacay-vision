@@ -174,13 +174,13 @@ const setupDatabase = async () => {
         if (verbose) console.log('Test Vacation inserted');
 
         await db.query(createHorizonHeadlinesTable);
-        if (verbose) console.log('Horizon Headline Table Created')
+        if (verbose) console.log('Horizon Headline Table ready')
 
         await db.query(createSupportTable);
-        if (verbose) console.log('Support Table Created')
+        if (verbose) console.log('Support Table ready')
 
         await db.query(createVacationCommentsTable);
-        if (verbose) console.log('Vacation Comments Table Created')
+        if (verbose) console.log('Vacation Comments Table ready')
 
         if (verbose) console.log('Database setup complete');
         return true;

@@ -71,3 +71,13 @@ VacayVision will be built as a server-side rendered (SSR) application using the 
 pnpm instead of npm
 
 pnpm run dev for live websocket reload
+
+### AI Agent Resources
+
+https://ai-sdk.dev/docs/foundations/providers-and-models
+
+https://ai-sdk.dev/providers/community-providers/ollama
+
+https://github.com/openai/openai-agents-js
+
+https://openai.github.io/openai-agents-js/guides/running-agents/
