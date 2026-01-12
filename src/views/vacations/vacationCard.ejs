@@ -1,0 +1,16 @@
+<article class="p-4 shadow-2xl/50 rounded">
+  <h2 class="text-lg font-semibold"><%= v.title %></h2>
+  <p><strong>Destination:</strong> <%= v.destination %></p>
+  <p><%= v.description %></p>
+  <img
+    src="<%= v.image_url %>"
+    alt="Image of <%= v.title %>"
+    style="max-width: 300px"
+  />
+  <% if (id == currentUser.user_id) { %>
+  <a class="text-[var(--brick-red)]" href="/vacation/<%- v.vacation_id %>/edit"
+    >Edit</a
+  >
+  <% } %>
+  <p><strong>Created:</strong> <%= formatCreatedAt(v.created_at) %></p>
+</article>

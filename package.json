@@ -5,9 +5,10 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
+    "tailwind:watch": "npx @tailwindcss/cli -i ./public/css/styles.css -o ./public/css/tailwind.css --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --env-file=.env server.js",
-    "start": "node --env-file=.env server.js"
+    "dev": "concurrently \"npx @tailwindcss/cli -i ./public/css/styles.css -o ./public/css/tailwind.css --watch\" \"nodemon --env-file=.env server.js\"",
+    "start": "concurrently \"pnpm run tailwind:watch\" \"node --env-file=.env server.js\""
   },
   "keywords": [],
   "author": "",
@@ -30,7 +31,13 @@
     "postgres": "^3.4.7"
   },
   "devDependencies": {
+    "@tailwindcss/cli": "^4.1.12",
+    "@tailwindcss/postcss": "^4.1.12",
+    "autoprefixer": "^10.4.21",
+    "concurrently": "^9.2.1",
     "nodemon": "^3.1.10",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.12",
     "ws": "^8.18.2"
   }
 }

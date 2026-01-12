@@ -1,85 +1,93 @@
 <%- include('partials/header') %>
 <!-- Header/Banner Section -->
+
 <div
-  class="banner-section"
-  style="background-image: url('images/vacayVisionHero2-min.png')"
+  class="relative h-128 bg-[url('/images/vacayvision-3.jpeg')] bg-cover bg-center"
 >
-  <div class="banner-overlay">
-    <h1 class="banner-title">VacayVision</h1>
-    <p class="banner-subtitle">Visualize Your Dream Vacation, Together!</p>
+  <div class="absolute inset-0 flex flex-col items-center justify-center">
+    <h1
+      class="text-4xl md:text-6xl font-bold text-white mb-4 text-shadow-lg text-shadow-black/50"
+    >
+      VacayVision
+    </h1>
+    <p
+      class="text-xl md:text-2xl text-white text-shadow-lg text-shadow-black/50"
+    >
+      Visualize Your Dream Vacation, Together!
+    </p>
   </div>
 </div>
 
 <!-- Main Content Section -->
-<main class="main-content-container">
+<main>
   <!-- About VacayVision Section -->
-  <section class="content-section">
-    <h2 class="section-title">What is VacayVision?</h2>
-    <p class="section-paragraph">
+  <section class="max-w-6xl shadow-lg/30 p-12 rounded my-16">
+    <h2 class="text-3xl md:text-4xl font-bold mb-4">What is VacayVision?</h2>
+    <p class="text-xl">
       VacayVision is a web application designed to help you visualize and plan
       your dream vacations, even if you don't know where to start. It provides a
-      platform for you to create personalized vacation "widgets" (HTML div
-      cards) where you can input details like desired locations, essential items
-      to bring, and must-visit hotspots. The core idea is to foster a community
-      where travelers can share their dream itineraries, inspire others, and
-      make travel planning a collaborative and easy experience.
+      platform for you to create personalized vacation "widgets" where you can
+      input details like desired locations, essential items to bring, and
+      must-visit hotspots. The core idea is to foster a community where
+      travelers can share their dream itineraries, inspire others, and make
+      travel planning a collaborative and easy experience.
     </p>
   </section>
 
   <!-- Our Goal Section -->
-  <section class="content-section">
-    <h2 class="section-title">Our Goal</h2>
-    <div class="goals-grid">
-      <div class="goal-item">
-        <svg class="goal-icon" fill="currentColor" viewBox="0 0 20 20">
+  <section class="max-w-6xl shadow-lg/30 p-12 rounded my-16">
+    <h2 class="text-3xl md:text-4xl font-bold mb-4">Our Goal</h2>
+    <div>
+      <div class="flex flex-row">
+        <svg class="w-6" fill="currentColor" viewBox="0 0 20 20">
           <path
             fill-rule="evenodd"
             d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
             clip-rule="evenodd"
           ></path>
         </svg>
-        <p class="section-paragraph">
+        <p>
           <strong>Empower Users:</strong> Provide a user-friendly interface for
           individuals to meticulously plan and visualize their ideal getaways.
         </p>
       </div>
-      <div class="goal-item">
-        <svg class="goal-icon" fill="currentColor" viewBox="0 0 20 20">
+      <div class="flex flex-row">
+        <svg class="w-6" fill="currentColor" viewBox="0 0 20 20">
           <path
             fill-rule="evenodd"
             d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
             clip-rule="evenodd"
           ></path>
         </svg>
-        <p class="section-paragraph">
+        <p>
           <strong>Travel:</strong> Create a vibrant community page where users
           can discover new destinations, activities, and packing essentials
           through shared dream vacations.
         </p>
       </div>
-      <div class="goal-item">
-        <svg class="goal-icon" fill="currentColor" viewBox="0 0 20 20">
+      <div class="flex flex-row">
+        <svg class="w-6" fill="currentColor" viewBox="0 0 20 20">
           <path
             fill-rule="evenodd"
             d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
             clip-rule="evenodd"
           ></path>
         </svg>
-        <p class="section-paragraph">
+        <p>
           <strong>Simplify Planning:</strong> Offer a centralized hub for travel
           inspiration, helping users who are unsure about potential travel
           destinations or what to expect.
         </p>
       </div>
-      <div class="goal-item">
-        <svg class="goal-icon" fill="currentColor" viewBox="0 0 20 20">
+      <div class="flex flex-row">
+        <svg class="w-6" fill="currentColor" viewBox="0 0 20 20">
           <path
             fill-rule="evenodd"
             d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
             clip-rule="evenodd"
           ></path>
         </svg>
-        <p class="section-paragraph">
+        <p>
           <strong>Facilitate Sharing:</strong> Enable seamless sharing of
           personalized vacation plans, fostering a sense of community among
           travelers.
@@ -89,13 +97,20 @@
   </section>
 
   <!-- Call to Action Section -->
-  <section class="cta-section">
-    <h2 class="cta-title">Ready to Plan Your Dream Vacation?</h2>
-    <p class="cta-subtitle">
+  <section class="bg-[var(--light-blue)] p-16 rounded my-16 shadow-2xl/20">
+    <h2 class="text-3xl md:text-4xl font-bold mb-4 text-[var(--dark-gray)]">
+      Ready to Plan Your Dream Vacation?
+    </h2>
+    <p class="mb-2 text-[var(--dark-gray)]">
       Join the VacayVision community today and start visualizing your next
       adventure!
     </p>
-    <a href="/auth/signup" class="cta-button"> Get Started Now! </a>
+    <a
+      class="shadow-xl/20 rounded-2xl bg-[var(--beige)] text-[var(--dark-gray)] mt-4 p-3 block text-center transition-all duration-300 ease-in-out hover:bg-[var(--sand-yellow)] hover:scale-105 hover:shadow-lg"
+      href="/auth/signup"
+    >
+      Get Started Today!
+    </a>
   </section>
 </main>
 <%- include('partials/footer') %>

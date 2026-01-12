@@ -1,10 +1,13 @@
 <%- include('../partials/header') %>
 <main>
   <h1><%= title %></h1>
-  <a href="/community/submit"
-    >Click here to submit one of your vacays for approval to the community
-    page</a
-  >
+  <div class="horizon-headlines-banner">
+    <a href="/community/submit"
+      >Click here to submit one of your vacays for approval to the community
+      page</a
+    >
+  </div>
+
   <div class="horizon-headlines-banner">
     <h2>Horizon Headlines</h2>
     <% if (headlines.length === 0) { %>
@@ -24,12 +27,12 @@
   <% approved.forEach(apr => { %>
   <div class="vacation-card">
     <h3>
-      <a href="/vacations/<%= apr.vacation_id %>"><%= apr.title %> </a> - by
+      <a href="/vacations/<%= apr.vacation_id %>"><%= apr.title %> </a> by
       <a href="/users/user/<%= apr.user_id%>"><%= apr.username %> </a>
     </h3>
     <p><strong>Destination:</strong> <%= apr.destination %></p>
-    <p><%= apr.description %></p>
-    <img src="<%= apr.image_url %>" style="max-width: 300px" /><br />
+    <p><i><%= apr.description %></i></p>
+    <img src="<%= apr.image_url %>" style="max-width: 500px" /><br />
   </div>
   <% }) %> <% } %>
 </main>

@@ -3,8 +3,37 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="keywords"
+      content="vacation, travel, planning, community, trip, itinerary"
+    />
+    <meta
+      name="description"
+      content="VacayVision helps you visualize and plan your dream vacation with community-driven ideas and personalized widgets."
+    />
+    <meta
+      property="og:title"
+      content="VacayVision | Visualize Your Dream Vacation"
+    />
+    <meta
+      property="og:description"
+      content="Plan your dream vacation with VacayVision's community-driven platform."
+    />
+    <meta property="og:image" content="/images/vacayvision-3.jpeg" />
+    <meta property="og:type" content="website" />
     <title><%= title %></title>
-    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="canonical" href="https://vacay-vision.onrender.com/" />
+    <link rel="stylesheet" href="/css/tailwind.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "VacayVision",
+        "url": "https://vacay-vision.onrender.com/",
+        "description": "Visualize and plan your dream vacation with VacayVision.",
+        "image": "https://vacay-vision.onrender.com/images/vacayVisionHero2-min.png"
+      }
+    </script>
     <% if (NODE_ENV.includes('dev')) { %>
     <script>
       const host = window.location.hostname;
@@ -19,29 +48,41 @@
   </head>
   <body>
     <header>
-      <%- include('flash') %>
-
-      <nav>
-        <ul>
-          <li><a href="/">Home</a></li>
-          <li><a href="/community">Community Creations</a></li>
+      <%- include('flash') %> <% const anchorStyles = "p-2 bg-slide-up-hover \
+      rounded"; %>
+      <nav class="flex items-center justify-between p-5">
+        <h2 class="text-xl text-white">VacayVision</h2>
+        <ul class="flex space-x-4">
+          <li class="<%= anchorStyles %>"><a href="/">Home</a></li>
+          <li class="<%= anchorStyles %>">
+            <a href="/community">Community Board</a>
+          </li>
           <% if (isLoggedIn) { %>
-          <li>
+          <li class="<%= anchorStyles %>">
             <a href="/users/user/<%= currentUser.user_id %>">My Profile</a>
           </li>
-          <li>
+          <li class="<%= anchorStyles %>">
             <a href="/community/my-submissions">Vacay History & Status</a>
           </li>
-          <li>
+          <li class="<%= anchorStyles %>">
             <form action="/auth/logout" method="POST" style="display: inline">
               <button type="submit" class="nav-logout-btn">Logout</button>
             </form>
           </li>
           <% if (currentUser && currentUser.role_id == 2) { %>
-          <li><a href="/dashboard">Admin</a></li>
+          <li class="<%= anchorStyles %>">
+            <a href="/dashboard">Admin</a>
+          </li>
+          <li class="<%= anchorStyles %>">
+            <a href="/ai">AI Tool</a>
+          </li>
           <% } %> <% } else { %>
-          <li><a href="/auth/login">Login</a></li>
-          <li><a href="/auth/signup">Sign Up</a></li>
+          <li class="<%= anchorStyles %>">
+            <a href="/auth/login">Login</a>
+          </li>
+          <li class="<%= anchorStyles %>">
+            <a href="/auth/signup">Sign Up</a>
+          </li>
           <% } %>
         </ul>
       </nav>

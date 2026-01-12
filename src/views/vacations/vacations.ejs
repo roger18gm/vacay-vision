@@ -4,20 +4,6 @@
   <a href="/vacations/new">
     <h3>Create New Vacay</h3>
   </a>
-  <% vacays.forEach(v => { %>
-  <article class="vacation-card">
-    <h2><%= v.title %></h2>
-    <p><strong>Destination:</strong> <%= v.destination %></p>
-    <p><%= v.description %></p>
-    <img
-      src="<%= v.image_url %>"
-      alt="Image of <%= v.title %>"
-      style="max-width: 300px"
-    />
-    <% if (id == currentUser.user_id) { %>
-    <a href="/vacation/<%- v.vacation_id %>/edit">Edit</a>
-    <% } %>
-  </article>
-  <% }) %>
+  <% vacays.forEach(v => { %> <%- include('./vacationCard', v) %> <% }) %>
 </main>
 <%- include('../partials/footer') %>

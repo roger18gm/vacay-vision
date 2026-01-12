@@ -70,11 +70,12 @@
       <button type="submit">Reject</button>
     </form>
   </div>
-  <% }) %> <% } %> <% if (rejected.length === 0) { %>
-  <p>No rejected submissions.</p>
-  <% } else { %>
+  <% }) %> <% } %>
+
   <h2>Rejected Submissions</h2>
-  <% rejected.forEach(rej => { %>
+  <% if (rejected.length === 0) { %>
+  <p>No rejected submissions.</p>
+  <% } else { %> <% rejected.forEach(rej => { %>
   <div class="vacation-card">
     <h3><%= rej.title %> – Submitted by <%= rej.username %></h3>
     <p><strong>Reviewed By:</strong> <%= rej.reviewer %></p>
