@@ -9,6 +9,9 @@ namespace juveApp.Data
 
         public DbSet<User> Users => Set<User>();
         public DbSet<Role> Roles => Set<Role>();
+        public DbSet<CommunityRequest> CommunityRequests => Set<CommunityRequest>();
+        public DbSet<Headline> Headlines => Set<Headline>();
+        public DbSet<Vacation> Vacations => Set<Vacation>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -32,6 +35,41 @@ namespace juveApp.Data
                 .HasOne(u => u.Role)
                 .WithMany(r => r.Users)
                 .HasForeignKey(u => u.RoleId);
+
+            // Configure CommunityRequest
+            modelBuilder.Entity<CommunityRequest>()
+                .ToTable("community_requests")
+                .HasKey(cr => cr.RequestId);
+
+            modelBuilder.Entity<CommunityRequest>()
+                .HasOne(cr => cr.Vacation)
+                .WithMany(v => v.CommunityRequests)
+                .HasForeignKey(cr => cr.VacationId);
+
+            modelBuilder.Entity<CommunityRequest>()
+                .HasOne(cr => cr.User)
+                .WithMany()
+                .HasForeignKey(cr => cr.UserId);
+
+            // Configure Headline
+            modelBuilder.Entity<Headline>()
+                .ToTable("horizon_headlines")
+                .HasKey(h => h.HeadlineId);
+
+            modelBuilder.Entity<Headline>()
+                .HasOne(h => h.Creator)
+                .WithMany()
+                .HasForeignKey(h => h.CreatedBy);
+
+            // Configure Vacation
+            modelBuilder.Entity<Vacation>()
+                .ToTable("vacations")
+                .HasKey(v => v.VacationId);
+
+            modelBuilder.Entity<Vacation>()
+                .HasOne(v => v.User)
+                .WithMany()
+                .HasForeignKey(v => v.UserId);
         }
     }
 }

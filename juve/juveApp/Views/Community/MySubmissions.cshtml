@@ -1,0 +1,70 @@
+@model List<juveApp.Models.CommunityRequest>
+@{
+    ViewData["Title"] = "My Submissions";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">My Submissions</h1>
+        <a href="/community" class="text-blue-600 hover:underline">← Back to Community</a>
+    </div>
+
+    @if (Model.Count == 0)
+    {
+        <div class="text-center py-12">
+            <p class="text-gray-500 text-lg">You haven't submitted any vacations yet.</p>
+            <a href="/community/submit"
+                class="inline-block mt-4 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">
+                Submit Your First Vacation
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="space-y-4">
+            @foreach (var request in Model)
+            {
+                var statusClass = request.Status switch
+                {
+                    "PENDING" => "bg-yellow-100 text-yellow-800",
+                    "APPROVED" => "bg-green-100 text-green-800",
+                    "REJECTED" => "bg-red-100 text-red-800",
+                    _ => "bg-gray-100 text-gray-800"
+                };
+
+                var statusText = request.Status switch
+                {
+                    "PENDING" => "Pending Review",
+                    "APPROVED" => "Approved ✓",
+                    "REJECTED" => "Rejected",
+                    _ => "Unknown"
+                };
+
+                <div class="bg-white rounded-lg shadow p-6">
+                    <div class="flex justify-between items-start">
+                        <div class="flex-1">
+                            <h3 class="text-xl font-semibold text-gray-800">@request.Vacation?.Title</h3>
+                            <p class="text-gray-600">📍 @request.Vacation?.Destination</p>
+                            <p class="text-gray-700 mt-2">@request.Vacation?.Description</p>
+                            <p class="text-sm text-gray-500 mt-2">Submitted: @request.SubmittedAt.ToString("MMM dd, yyyy")</p>
+
+                            @if (!string.IsNullOrEmpty(request.RejectionReason))
+                            {
+                                <div class="mt-4 p-3 bg-gray-50 rounded">
+                                    <p class="text-sm font-semibold text-gray-700">Feedback:</p>
+                                    <p class="text-sm text-gray-600">@request.RejectionReason</p>
+                                </div>
+                            }
+                        </div>
+
+                        <div>
+                            <span class="@statusClass px-3 py-1 rounded-full text-sm font-semibold">
+                                @statusText
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

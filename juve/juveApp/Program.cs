@@ -12,8 +12,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-// Register AuthService
+// Register services
 builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<CommunityService>();
 
 // Configure session
 builder.Services.AddSession(options =>
