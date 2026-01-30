@@ -1,0 +1,50 @@
+@{
+    ViewData["Title"] = "Home - VacayVision";
+}
+
+<div class="text-center py-12">
+    <h1 class="text-5xl font-bold text-gray-800 mb-4">Welcome to VacayVision</h1>
+    <p class="text-xl text-gray-600 mb-8">Visualize and plan your dream vacations with our community</p>
+
+    @if (User.Identity?.IsAuthenticated == true)
+    {
+        <div class="space-x-4">
+            <a href="/community"
+                class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700">
+                Browse Community Vacations
+            </a>
+            <a href="/vacations"
+                class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700">
+                My Vacations
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="space-x-4">
+            <a href="/auth/login"
+                class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700">
+                Login
+            </a>
+            <a href="/auth/signup"
+                class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-green-700">
+                Sign Up
+            </a>
+        </div>
+    }
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+    <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-2xl font-bold mb-3">Plan Together</h2>
+        <p class="text-gray-600">Collaborate with friends and family to plan the perfect vacation.</p>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-2xl font-bold mb-3">Share Ideas</h2>
+        <p class="text-gray-600">Browse community vacation ideas and get inspired for your next trip.</p>
+    </div>
+    <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-2xl font-bold mb-3">Organize Details</h2>
+        <p class="text-gray-600">Keep all your vacation details, widgets, and comments in one place.</p>
+    </div>
+</div>
