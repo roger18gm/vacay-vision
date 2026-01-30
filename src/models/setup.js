@@ -56,7 +56,6 @@ const createVacationsTable = `
     CREATE TABLE IF NOT EXISTS vacations (
         vacation_id SERIAL PRIMARY KEY,
         title VARCHAR(100) NOT NULL,
-        status VARCHAR(100) NOT NULL,
         destination VARCHAR(100) NOT NULL,
         description TEXT,
         image_url VARCHAR(500) NOT NULL,
@@ -69,8 +68,8 @@ const createVacationsTable = `
  * SQL to insert a default vacation.
  */
 const insertTestVacation = `
-    INSERT INTO vacations (vacation_id, title, status, destination, description, image_url, user_id) VALUES 
-        (0, 'Island Escape', 'pending', 'Mexico', 'Dreaming of turquoise waters and white sand beaches.', 'https://example.com/beach.jpg', 1)
+    INSERT INTO vacations (vacation_id, title, destination, description, image_url, user_id) VALUES 
+        (0, 'Island Escape', 'Mexico', 'Dreaming of turquoise waters and white sand beaches.', 'https://example.com/beach.jpg', 1)
     ON CONFLICT (vacation_id) DO NOTHING;
 `;
 
