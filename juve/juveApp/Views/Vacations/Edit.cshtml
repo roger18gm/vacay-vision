@@ -1,0 +1,68 @@
+@model juveApp.Models.ViewModels.EditVacationViewModel
+
+@{
+    ViewData["Title"] = "Edit Vacation";
+}
+
+<div class="container mx-auto px-4 py-8 max-w-2xl">
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6">Edit Vacation</h1>
+
+        <form asp-action="Update" asp-route-id="@Model.VacationId" method="post">
+            @Html.AntiForgeryToken()
+            <input asp-for="VacationId" type="hidden" />
+            <div asp-validation-summary="All"
+                class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4"></div>
+
+            <div class="mb-4">
+                <label asp-for="Title" class="block text-gray-700 font-semibold mb-2">Title *</label>
+                <input asp-for="Title" type="text"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="My Amazing Trip">
+                <span asp-validation-for="Title" class="text-red-600 text-sm"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Destination" class="block text-gray-700 font-semibold mb-2">Destination *</label>
+                <input asp-for="Destination" type="text"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Paris, France">
+                <span asp-validation-for="Destination" class="text-red-600 text-sm"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Description" class="block text-gray-700 font-semibold mb-2">Description</label>
+                <textarea asp-for="Description" rows="6"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Tell us about your vacation experience..."></textarea>
+                <span asp-validation-for="Description" class="text-red-600 text-sm"></span>
+                <p class="text-sm text-gray-500 mt-1">Optional - Describe your experience, favorite moments,
+                    recommendations, etc.</p>
+            </div>
+
+            <div class="mb-6">
+                <label asp-for="ImageUrl" class="block text-gray-700 font-semibold mb-2">Image URL</label>
+                <input asp-for="ImageUrl" type="url"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="https://example.com/image.jpg">
+                <span asp-validation-for="ImageUrl" class="text-red-600 text-sm"></span>
+                <p class="text-sm text-gray-500 mt-1">Optional - Provide a URL to an image from your vacation.</p>
+            </div>
+
+            <div class="flex gap-4">
+                <button type="submit"
+                    class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-colors">
+                    Update Vacation
+                </button>
+                <a asp-action="Detail" asp-route-id="@Model.VacationId"
+                    class="flex-1 bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold px-6 py-3 rounded-lg text-center transition-colors">
+                    Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

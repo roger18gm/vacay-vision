@@ -1,0 +1,90 @@
+@model List<juveApp.Models.Vacation>
+
+@{
+    ViewData["Title"] = "My Vacations";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">My Vacations</h1>
+        <a asp-action="Create" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
+            New Vacation
+        </a>
+    </div>
+
+    @if (Model == null || Model.Count == 0)
+    {
+        <div class="bg-gray-50 border-2 border-dashed border-gray-300 rounded-lg p-12 text-center">
+            <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+            </svg>
+            <h3 class="text-lg font-medium text-gray-900 mb-2">No vacations yet</h3>
+            <p class="text-gray-600 mb-6">Get started by creating your first vacation memory.</p>
+            <a asp-action="Create"
+                class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
+                Create Your First Vacation
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach (var vacation in Model)
+            {
+                <div class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+                    @if (!string.IsNullOrWhiteSpace(vacation.ImageUrl))
+                    {
+                        <img src="@vacation.ImageUrl" alt="@vacation.Title" class="w-full h-48 object-cover">
+                    }
+                    else
+                    {
+                        <div class="w-full h-48 bg-gray-300 flex items-center justify-center">
+                            <svg class="h-16 w-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                </path>
+                            </svg>
+                        </div>
+                    }
+
+                    <div class="p-4">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-2">@vacation.Title</h2>
+                        <p class="text-gray-600 mb-2">
+                            <svg class="inline h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                                </path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            @vacation.Destination
+                        </p>
+                        <p class="text-sm text-gray-500 mb-4">
+                            Created @vacation.CreatedAt.ToString("MMMM dd, yyyy")
+                        </p>
+
+                        <div class="flex gap-2">
+                            <a asp-action="Detail" asp-route-id="@vacation.VacationId"
+                                class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-center px-4 py-2 rounded transition-colors">
+                                View
+                            </a>
+                            <a asp-action="Edit" asp-route-id="@vacation.VacationId"
+                                class="flex-1 bg-gray-600 hover:bg-gray-700 text-white text-center px-4 py-2 rounded transition-colors">
+                                Edit
+                            </a>
+                            <form asp-action="Delete" asp-route-id="@vacation.VacationId" method="post" class="flex-1"
+                                onsubmit="return confirm('Are you sure you want to delete this vacation?');">
+                                @Html.AntiForgeryToken()
+                                <button type="submit"
+                                    class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition-colors">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

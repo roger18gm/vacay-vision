@@ -37,7 +37,8 @@ namespace juveApp.Models
         [ForeignKey("UserId")]
         public User? User { get; set; }
 
-        // Will be expanded in Phase 3
         public ICollection<CommunityRequest> CommunityRequests { get; set; } = new List<CommunityRequest>();
+        public ICollection<VacationComment> Comments { get; set; } = new List<VacationComment>();
+        public ICollection<VacationWidget> Widgets { get; set; } = new List<VacationWidget>();
     }
 }

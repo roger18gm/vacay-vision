@@ -15,6 +15,8 @@ builder.Services.AddRazorPages();
 // Register services
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<CommunityService>();
+builder.Services.AddScoped<VacationService>();
+builder.Services.AddScoped<CommentService>();
 
 // Configure session
 builder.Services.AddSession(options =>
