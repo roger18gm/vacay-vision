@@ -53,7 +53,7 @@ namespace juveApp.Controllers
                 new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim("role_id", user.RoleId.ToString())
+                new Claim(ClaimTypes.Role, user.RoleId.ToString())
             };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);

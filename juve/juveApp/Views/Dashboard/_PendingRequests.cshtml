@@ -1,0 +1,84 @@
+@model List<juveApp.Models.CommunityRequest>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="text-center py-8">
+        <svg class="mx-auto h-12 w-12 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <p class="text-gray-600">No pending requests at this time.</p>
+    </div>
+}
+else
+{
+    <div class="space-y-4">
+        @foreach (var request in Model)
+        {
+            <div class="border border-gray-200 rounded-lg p-4">
+                <!-- Request Header -->
+                <div class="flex justify-between items-start mb-3">
+                    <div>
+                        <h3 class="font-semibold text-lg text-gray-800">
+                            @request.Vacation?.Title
+                        </h3>
+                        <p class="text-sm text-gray-600">
+                            Submitted by
+                            <a href="/users/@request.UserId" class="text-blue-600 hover:text-blue-700">
+                                @request.User?.Username
+                            </a>
+                        </p>
+                        <p class="text-xs text-gray-500">
+                            @request.CreatedAt.ToString("MMM dd, yyyy 'at' h:mm tt")
+                        </p>
+                    </div>
+                    <span class="bg-yellow-100 text-yellow-800 text-xs font-semibold px-3 py-1 rounded-full">
+                        Pending
+                    </span>
+                </div>
+
+                <!-- Vacation Details -->
+                @if (request.Vacation != null)
+                {
+                    <div class="mb-3 p-3 bg-gray-50 rounded">
+                        <p class="text-sm text-gray-700">
+                            <span class="font-semibold">Destination:</span> @request.Vacation.Destination
+                        </p>
+                        @if (!string.IsNullOrEmpty(request.Vacation.Description))
+                        {
+                            <p class="text-sm text-gray-700 mt-1">
+                                <span class="font-semibold">Description:</span>
+                                @(request.Vacation.Description.Length > 150
+                                                ? request.Vacation.Description.Substring(0, 150) + "..."
+                                                : request.Vacation.Description)
+                            </p>
+                        }
+                        <a href="/vacations/@request.VacationId" target="_blank"
+                            class="text-blue-600 hover:text-blue-700 text-sm mt-2 inline-block">
+                            View Full Vacation →
+                        </a>
+                    </div>
+                }
+
+                <!-- Action Buttons -->
+                <div class="flex gap-2 mt-3">
+                    <form asp-action="ApproveRequest" asp-route-id="@request.RequestId" method="post" class="flex-1">
+                        @Html.AntiForgeryToken()
+                        <button type="submit"
+                            class="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition-colors">
+                            Approve
+                        </button>
+                    </form>
+                    <form asp-action="RejectRequest" asp-route-id="@request.RequestId" method="post" class="flex-1"
+                        onsubmit="return confirm('Are you sure you want to reject this request?');">
+                        @Html.AntiForgeryToken()
+                        <button type="submit"
+                            class="w-full bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition-colors">
+                            Reject
+                        </button>
+                    </form>
+                </div>
+            </div>
+        }
+    </div>
+}

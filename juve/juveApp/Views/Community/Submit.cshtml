@@ -1,0 +1,98 @@
+@model List<juveApp.Models.Vacation>
+@{
+    ViewData["Title"] = "Submit Vacation to Community";
+}
+
+<div class="container mx-auto px-4 py-8 max-w-4xl">
+    <div class="mb-6">
+        <a href="/community" class="text-blue-600 hover:text-blue-700 flex items-center">
+            <svg class="h-5 w-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
+                </path>
+            </svg>
+            Back to Community
+        </a>
+    </div>
+
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4">Submit Vacation to Community</h1>
+        <p class="text-gray-600 mb-6">
+            Choose one of your vacations to submit for community approval. Once approved, it will be visible to all
+            users on the community page.
+        </p>
+
+        @if (Model == null || Model.Count == 0)
+        {
+            <div class="bg-yellow-50 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6">
+                <p class="font-semibold">No vacations available</p>
+                <p>You don't have any vacations to submit, or all your vacations have already been submitted.</p>
+            </div>
+            <a href="/vacations/create" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg inline-block">
+                Create a Vacation
+            </a>
+        }
+        else
+        {
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                @foreach (var vacation in Model)
+                {
+                    <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+                        @if (!string.IsNullOrEmpty(vacation.ImageUrl))
+                        {
+                            <img src="@vacation.ImageUrl" alt="@vacation.Title" class="w-full h-48 object-cover">
+                        }
+                        else
+                        {
+                            <div class="w-full h-48 bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center">
+                                <svg class="h-16 w-16 text-white opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                    </path>
+                                </svg>
+                            </div>
+                        }
+
+                        <div class="p-4">
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">@vacation.Title</h3>
+                            <p class="text-gray-600 mb-2 flex items-center">
+                                <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z">
+                                    </path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                @vacation.Destination
+                            </p>
+
+                            @if (!string.IsNullOrEmpty(vacation.Description))
+                            {
+                                <p class="text-gray-700 text-sm mb-3 line-clamp-3">
+                                    @(vacation.Description.Length > 120 ? vacation.Description.Substring(0, 120) + "..." :
+                                                            vacation.Description)
+                                </p>
+                            }
+
+                            <p class="text-xs text-gray-500 mb-4">
+                                Created @vacation.CreatedAt.ToString("MMMM dd, yyyy")
+                            </p>
+
+                            <form asp-action="SubmitVacation" method="post" class="flex gap-2">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="vacationId" value="@vacation.VacationId" />
+                                <button type="submit"
+                                    class="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded transition-colors">
+                                    Submit This Vacation
+                                </button>
+                                <a href="/vacations/@vacation.VacationId" target="_blank"
+                                    class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded transition-colors">
+                                    Preview
+                                </a>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

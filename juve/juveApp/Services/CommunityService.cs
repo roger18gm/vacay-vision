@@ -21,7 +21,7 @@ namespace juveApp.Services
             return await _context.CommunityRequests
                 .Include(cr => cr.Vacation)
                     .ThenInclude(v => v!.User)
-                .Where(cr => cr.Status.ToUpper() == "APPROVED")
+                .Where(cr => cr.Status.ToLower() == "approved" && cr.Vacation != null)
                 .OrderByDescending(cr => cr.CreatedAt)
                 .ToListAsync();
         }
@@ -62,6 +62,59 @@ namespace juveApp.Services
                 "REJECTED" => "Rejected",
                 _ => "Unknown"
             };
+        }
+
+        /// <summary>
+        /// Get user's vacations that haven't been submitted to community
+        /// </summary>
+        public async Task<List<Vacation>> GetUserVacationsNotSubmittedAsync(int userId)
+        {
+            // Get all vacation IDs that have been submitted
+            var submittedVacationIds = await _context.CommunityRequests
+                .Where(cr => cr.UserId == userId)
+                .Select(cr => cr.VacationId)
+                .ToListAsync();
+
+            // Get vacations not in the submitted list
+            return await _context.Vacations
+                .Where(v => v.UserId == userId && !submittedVacationIds.Contains(v.VacationId))
+                .OrderByDescending(v => v.CreatedAt)
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Submit a vacation for community approval
+        /// </summary>
+        public async Task<CommunityRequest> SubmitVacationAsync(int vacationId, int userId)
+        {
+            // Check if vacation exists and belongs to user
+            var vacation = await _context.Vacations
+                .FirstOrDefaultAsync(v => v.VacationId == vacationId && v.UserId == userId);
+
+            if (vacation == null)
+                throw new InvalidOperationException("Vacation not found or does not belong to user");
+
+            // Check if already submitted
+            var existingRequest = await _context.CommunityRequests
+                .FirstOrDefaultAsync(cr => cr.VacationId == vacationId && cr.UserId == userId);
+
+            if (existingRequest != null)
+                throw new InvalidOperationException("This vacation has already been submitted");
+
+            var request = new CommunityRequest
+            {
+                VacationId = vacationId,
+                UserId = userId,
+                Status = "pending",
+                SubmittedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            _context.CommunityRequests.Add(request);
+            await _context.SaveChangesAsync();
+
+            return request;
         }
     }
 }

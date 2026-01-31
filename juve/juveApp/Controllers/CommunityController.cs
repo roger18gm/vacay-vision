@@ -63,5 +63,70 @@ namespace juveApp.Controllers
                 return Redirect("/community");
             }
         }
+
+        /// <summary>
+        /// GET /community/submit - Show vacation submission form
+        /// </summary>
+        [HttpGet("submit")]
+        public async Task<IActionResult> Submit()
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+                if (userIdClaim == null)
+                {
+                    return Redirect("/auth/login");
+                }
+
+                int userId = int.Parse(userIdClaim.Value);
+                var availableVacations = await _communityService.GetUserVacationsNotSubmittedAsync(userId);
+
+                if (availableVacations.Count == 0)
+                {
+                    TempData["ErrorMessage"] = "You don't have any vacations to submit. Create a vacation first!";
+                    return RedirectToAction("Index", "Vacations");
+                }
+
+                return View(availableVacations);
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Failed to load submission form";
+                return Redirect("/community");
+            }
+        }
+
+        /// <summary>
+        /// POST /community/submit - Submit a vacation for approval
+        /// </summary>
+        [HttpPost("submit")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SubmitVacation(int vacationId)
+        {
+            try
+            {
+                var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+                if (userIdClaim == null)
+                {
+                    return Redirect("/auth/login");
+                }
+
+                int userId = int.Parse(userIdClaim.Value);
+                await _communityService.SubmitVacationAsync(vacationId, userId);
+
+                TempData["SuccessMessage"] = "Vacation submitted for approval! You'll be notified once it's reviewed.";
+                return RedirectToAction("MySubmissions");
+            }
+            catch (InvalidOperationException ex)
+            {
+                TempData["ErrorMessage"] = ex.Message;
+                return RedirectToAction("Submit");
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Failed to submit vacation. Please try again.";
+                return RedirectToAction("Submit");
+            }
+        }
     }
 }
