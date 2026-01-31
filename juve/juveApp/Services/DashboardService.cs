@@ -137,6 +137,48 @@ namespace juveApp.Services
 
             return stats;
         }
+
+        /// <summary>
+        /// Get recent support feedback submissions
+        /// </summary>
+        public async Task<List<SupportFeedback>> GetRecentFeedbackAsync(int count = 10)
+        {
+            return await _context.SupportFeedback
+                .Include(f => f.User)
+                .OrderByDescending(f => f.CreatedAt)
+                .Take(count)
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Get pending support feedback
+        /// </summary>
+        public async Task<List<SupportFeedback>> GetPendingFeedbackAsync()
+        {
+            return await _context.SupportFeedback
+                .Include(f => f.User)
+                .Where(f => f.Status == "pending")
+                .OrderBy(f => f.CreatedAt)
+                .ToListAsync();
+        }
+
+        /// <summary>
+        /// Update feedback status
+        /// </summary>
+        public async Task<bool> UpdateFeedbackStatusAsync(int feedbackId, string status)
+        {
+            var feedback = await _context.SupportFeedback.FindAsync(feedbackId);
+            if (feedback == null) return false;
+
+            feedback.Status = status;
+            if (status == "resolved")
+            {
+                feedback.ResolvedAt = DateTime.UtcNow;
+            }
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
     }
 
     /// <summary>

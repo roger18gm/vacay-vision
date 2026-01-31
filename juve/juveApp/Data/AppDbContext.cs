@@ -14,6 +14,7 @@ namespace juveApp.Data
         public DbSet<Vacation> Vacations => Set<Vacation>();
         public DbSet<VacationComment> VacationComments => Set<VacationComment>();
         public DbSet<VacationWidget> VacationWidgets => Set<VacationWidget>();
+        public DbSet<SupportFeedback> SupportFeedback => Set<SupportFeedback>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

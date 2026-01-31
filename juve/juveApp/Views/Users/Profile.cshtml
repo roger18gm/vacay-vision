@@ -1,0 +1,131 @@
+@model juveApp.Models.User
+@{
+    ViewData["Title"] = $"{Model.Username}'s Profile";
+    var vacations = ViewBag.Vacations as List<juveApp.Models.Vacation>;
+    var stats = ViewBag.Stats as juveApp.Services.UserStats;
+    var isOwnProfile = (bool)ViewBag.IsOwnProfile;
+}
+
+<div class="container mx-auto px-4 py-8">
+    <!-- User Profile Header -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+        <div class="flex items-start justify-between">
+            <div class="flex items-center">
+                <!-- Avatar -->
+                <div
+                    class="bg-blue-500 text-white rounded-full h-20 w-20 flex items-center justify-center text-3xl font-bold mr-6">
+                    @Model.Username.Substring(0, Math.Min(2, Model.Username.Length)).ToUpper()
+                </div>
+
+                <!-- User Info -->
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800 mb-2">@Model.Username</h1>
+                    <p class="text-gray-600 mb-1">@Model.Email</p>
+                    <p class="text-sm text-gray-500">Member since @Model.CreatedAt.ToString("MMMM yyyy")</p>
+                    @if (!string.IsNullOrEmpty(Model.Bio))
+                    {
+                        <p class="text-gray-700 mt-3 italic">"@Model.Bio"</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Role Badge -->
+            @if (Model.Role != null)
+            {
+                <span class="bg-purple-100 text-purple-800 px-4 py-2 rounded-full text-sm font-semibold">
+                    @Model.Role.RoleName
+                </span>
+            }
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    @if (stats != null)
+    {
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg">
+                <div class="text-blue-700 text-sm font-semibold mb-1">Vacations</div>
+                <div class="text-3xl font-bold text-blue-800">@stats.TotalVacations</div>
+            </div>
+            <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-lg">
+                <div class="text-green-700 text-sm font-semibold mb-1">Comments</div>
+                <div class="text-3xl font-bold text-green-800">@stats.TotalComments</div>
+            </div>
+            <div class="bg-purple-50 border-l-4 border-purple-500 p-4 rounded-lg">
+                <div class="text-purple-700 text-sm font-semibold mb-1">Approved</div>
+                <div class="text-3xl font-bold text-purple-800">@stats.ApprovedSubmissions</div>
+            </div>
+            <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-lg">
+                <div class="text-yellow-700 text-sm font-semibold mb-1">Pending</div>
+                <div class="text-3xl font-bold text-yellow-800">@stats.PendingSubmissions</div>
+            </div>
+        </div>
+    }
+
+    <!-- Two Column Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Left Column: Vacations -->
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                    @(isOwnProfile ? "My Vacations" : $"{Model.Username}'s Vacations")
+                </h2>
+
+                @if (vacations == null || vacations.Count == 0)
+                {
+                    <div class="text-center py-12">
+                        <svg class="mx-auto h-12 w-12 text-gray-400 mb-4" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
+                        </svg>
+                        <p class="text-gray-600">@(isOwnProfile ? "You haven't created any vacations yet." : "This user             hasn't shared any vacations yet.")</p>
+                        @if (isOwnProfile)
+                        {
+                            <a href="/vacations/create"
+                                class="mt-4 inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors">
+                                Create Your First Vacation
+                            </a>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        @foreach (var vacation in vacations)
+                        {
+                            <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
+                                @if (!string.IsNullOrEmpty(vacation.ImageUrl))
+                                {
+                                    <img src="@vacation.ImageUrl" alt="@vacation.Title" class="w-full h-32 object-cover">
+                                }
+                                else
+                                {
+                                    <div class="w-full h-32 bg-gradient-to-br from-blue-400 to-purple-500"></div>
+                                }
+
+                                <div class="p-3">
+                                    <h3 class="font-semibold text-gray-800 mb-1">@vacation.Title</h3>
+                                    <p class="text-sm text-gray-600 mb-2">📍 @vacation.Destination</p>
+                                    <p class="text-xs text-gray-500">@vacation.CreatedAt.ToString("MMM dd, yyyy")</p>
+                                    <a href="/vacations/@vacation.VacationId"
+                                        class="mt-2 inline-block text-blue-600 hover:text-blue-700 text-sm">
+                                        View Details →
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+
+        <!-- Right Column: Feedback Form (only on own profile) -->
+        @if (isOwnProfile)
+        {
+            <div>
+                @await Html.PartialAsync("_FeedbackForm", Model)
+            </div>
+        }
+    </div>
+</div>

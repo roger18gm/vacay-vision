@@ -18,6 +18,7 @@ builder.Services.AddScoped<CommunityService>();
 builder.Services.AddScoped<VacationService>();
 builder.Services.AddScoped<CommentService>();
 builder.Services.AddScoped<DashboardService>();
+builder.Services.AddScoped<UserService>();
 
 // Configure session
 builder.Services.AddSession(options =>

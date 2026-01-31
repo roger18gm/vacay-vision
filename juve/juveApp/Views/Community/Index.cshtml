@@ -54,14 +54,24 @@
                             <span class="text-gray-500">No Image</span>
                         </div>
                     }
-                    
+
                     <div class="p-4">
                         <h3 class="text-xl font-semibold text-gray-800 mb-2">@request.Vacation?.Title</h3>
                         <p class="text-gray-600 mb-2">📍 @request.Vacation?.Destination</p>
                         <p class="text-gray-700 mb-4">@request.Vacation?.Description</p>
-                        
+
                         <div class="flex justify-between items-center text-sm text-gray-500">
-                            <span>By @request.Vacation?.User?.Username</span>
+                            <span>By
+                                @if (request.UserId > 0)
+                                {
+                                    <a href="/users/@request.UserId"
+                                        class="text-blue-600 hover:text-blue-700">@request.Vacation?.User?.Username</a>
+                                }
+                                else
+                                {
+                                    <text>@request.Vacation?.User?.Username</text>
+                                }
+                            </span>
                             <span>@request.CreatedAt.ToString("MMM dd, yyyy")</span>
                         </div>
                     </div>

@@ -25,7 +25,9 @@
                         <p class="font-semibold text-gray-800">
                             @if (comment.User != null)
                             {
-                                @comment.User.Username
+                                <a href="/users/@comment.UserId" class="text-blue-600 hover:text-blue-700">
+                                    @comment.User.Username
+                                </a>
                             }
                             else
                             {

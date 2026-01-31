@@ -38,10 +38,12 @@ namespace juveApp.Controllers
                 var stats = await _dashboardService.GetDashboardStatsAsync();
                 var pendingRequests = await _dashboardService.GetPendingRequestsAsync();
                 var recentHeadlines = await _dashboardService.GetRecentHeadlinesAsync(5);
+                var pendingFeedback = await _dashboardService.GetPendingFeedbackAsync();
 
                 ViewBag.Stats = stats;
                 ViewBag.PendingRequests = pendingRequests;
                 ViewBag.Headlines = recentHeadlines;
+                ViewBag.PendingFeedback = pendingFeedback;
 
                 return View();
             }
@@ -206,6 +208,36 @@ namespace juveApp.Controllers
             {
                 _logger.LogError(ex, "Error deleting headline");
                 TempData["ErrorMessage"] = "Failed to delete headline. Please try again.";
+                return RedirectToAction("Index");
+            }
+        }
+
+        /// <summary>
+        /// POST /dashboard/resolve-feedback/{id} - Mark feedback as resolved
+        /// </summary>
+        [HttpPost("resolve-feedback/{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResolveFeedback(int id)
+        {
+            try
+            {
+                bool success = await _dashboardService.UpdateFeedbackStatusAsync(id, "resolved");
+
+                if (success)
+                {
+                    TempData["SuccessMessage"] = "Feedback marked as resolved!";
+                }
+                else
+                {
+                    TempData["ErrorMessage"] = "Feedback not found.";
+                }
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error resolving feedback");
+                TempData["ErrorMessage"] = "Failed to resolve feedback. Please try again.";
                 return RedirectToAction("Index");
             }
         }
