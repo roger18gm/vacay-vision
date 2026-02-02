@@ -1,7 +1,9 @@
 @model juveApp.Models.ViewModels.AddCommentViewModel
 
 <div class="bg-gray-50 rounded-lg p-4 mb-6">
-    <form asp-action="AddComment" asp-route-id="@Model.VacationId" method="post">
+    <form asp-action="AddComment" asp-route-id="@Model.VacationId" method="post"
+        hx-post="/vacations/@Model.VacationId/comments" hx-target="#comments-list" hx-swap="outerHTML"
+        hx-on::after-request="if(event.detail.successful) this.reset()">
         @Html.AntiForgeryToken()
         <input asp-for="VacationId" type="hidden" />
 

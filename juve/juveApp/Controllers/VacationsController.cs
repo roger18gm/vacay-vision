@@ -234,12 +234,22 @@ namespace juveApp.Controllers
         {
             if (id != model.VacationId)
             {
+                if (Request.Headers["HX-Request"] == "true")
+                {
+                    Response.Headers["HX-Trigger"] = "showError";
+                    return Content("<div class='text-red-600 p-2'>Invalid request.</div>");
+                }
                 TempData["ErrorMessage"] = "Invalid request.";
                 return RedirectToAction("Detail", new { id });
             }
 
             if (!ModelState.IsValid)
             {
+                if (Request.Headers["HX-Request"] == "true")
+                {
+                    Response.Headers["HX-Trigger"] = "showError";
+                    return Content("<div class='text-red-600 p-2'>Comment cannot be empty.</div>");
+                }
                 TempData["ErrorMessage"] = "Comment cannot be empty.";
                 return RedirectToAction("Detail", new { id });
             }
@@ -248,12 +258,27 @@ namespace juveApp.Controllers
             {
                 int userId = GetCurrentUserId();
                 await _commentService.AddCommentAsync(model, userId);
+
+                // For HTMX requests, return the updated comments list
+                if (Request.Headers["HX-Request"] == "true")
+                {
+                    var comments = await _commentService.GetCommentsByVacationAsync(id);
+                    ViewBag.CurrentUserId = userId;
+                    Response.Headers["HX-Trigger"] = "commentAdded";
+                    return PartialView("_CommentsList", comments);
+                }
+
                 TempData["SuccessMessage"] = "Comment added successfully!";
                 return RedirectToAction("Detail", new { id });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error adding comment");
+                if (Request.Headers["HX-Request"] == "true")
+                {
+                    Response.Headers["HX-Trigger"] = "showError";
+                    return Content("<div class='text-red-600 p-2'>Failed to add comment. Please try again.</div>");
+                }
                 TempData["ErrorMessage"] = "Failed to add comment. Please try again.";
                 return RedirectToAction("Detail", new { id });
             }
@@ -273,8 +298,22 @@ namespace juveApp.Controllers
 
                 if (!success)
                 {
+                    if (Request.Headers["HX-Request"] == "true")
+                    {
+                        Response.Headers["HX-Trigger"] = "showError";
+                        return Content("<div class='text-red-600 p-2'>You don't have permission to delete this comment.</div>");
+                    }
                     TempData["ErrorMessage"] = "You don't have permission to delete this comment.";
                     return RedirectToAction("Detail", new { id });
+                }
+
+                // For HTMX requests, return the updated comments list
+                if (Request.Headers["HX-Request"] == "true")
+                {
+                    var comments = await _commentService.GetCommentsByVacationAsync(id);
+                    ViewBag.CurrentUserId = userId;
+                    Response.Headers["HX-Trigger"] = "commentDeleted";
+                    return PartialView("_CommentsList", comments);
                 }
 
                 TempData["SuccessMessage"] = "Comment deleted successfully!";
@@ -283,6 +322,11 @@ namespace juveApp.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error deleting comment");
+                if (Request.Headers["HX-Request"] == "true")
+                {
+                    Response.Headers["HX-Trigger"] = "showError";
+                    return Content("<div class='text-red-600 p-2'>Failed to delete comment. Please try again.</div>");
+                }
                 TempData["ErrorMessage"] = "Failed to delete comment. Please try again.";
                 return RedirectToAction("Detail", new { id });
             }

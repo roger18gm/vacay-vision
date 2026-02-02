@@ -56,6 +56,24 @@ namespace juveApp.Controllers
         }
 
         /// <summary>
+        /// GET /dashboard/stats - Get current dashboard statistics
+        /// </summary>
+        [HttpGet("stats")]
+        public async Task<IActionResult> GetStats()
+        {
+            try
+            {
+                var stats = await _dashboardService.GetDashboardStatsAsync();
+                return PartialView("_DashboardStats", stats);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching dashboard stats");
+                return Content("<div id='dashboard-stats'></div>");
+            }
+        }
+
+        /// <summary>
         /// POST /dashboard/approve/{id} - Approve a community request
         /// </summary>
         [HttpPost("approve/{id}")]
@@ -65,6 +83,14 @@ namespace juveApp.Controllers
             try
             {
                 bool success = await _dashboardService.UpdateCommunityRequestStatusAsync(id, "approved");
+
+                // For HTMX requests, return updated pending requests list and trigger stats update
+                if (Request.Headers["HX-Request"] == "true")
+                {
+                    var pendingRequests = await _dashboardService.GetPendingRequestsAsync();
+                    Response.Headers["HX-Trigger"] = success ? "updateStats" : "showError";
+                    return PartialView("_PendingRequests", pendingRequests);
+                }
 
                 if (success)
                 {
@@ -80,6 +106,12 @@ namespace juveApp.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error approving request");
+                if (Request.Headers["HX-Request"] == "true")
+                {
+                    var pendingRequests = await _dashboardService.GetPendingRequestsAsync();
+                    Response.Headers["HX-Trigger"] = "showError";
+                    return PartialView("_PendingRequests", pendingRequests);
+                }
                 TempData["ErrorMessage"] = "Failed to approve request. Please try again.";
                 return RedirectToAction("Index");
             }
@@ -96,6 +128,14 @@ namespace juveApp.Controllers
             {
                 bool success = await _dashboardService.UpdateCommunityRequestStatusAsync(id, "rejected", rejectionReason);
 
+                // For HTMX requests, return updated pending requests list and trigger stats update
+                if (Request.Headers["HX-Request"] == "true")
+                {
+                    var pendingRequests = await _dashboardService.GetPendingRequestsAsync();
+                    Response.Headers["HX-Trigger"] = success ? "updateStats" : "showError";
+                    return PartialView("_PendingRequests", pendingRequests);
+                }
+
                 if (success)
                 {
                     TempData["SuccessMessage"] = "Community request rejected.";
@@ -110,6 +150,12 @@ namespace juveApp.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error rejecting request");
+                if (Request.Headers["HX-Request"] == "true")
+                {
+                    var pendingRequests = await _dashboardService.GetPendingRequestsAsync();
+                    Response.Headers["HX-Trigger"] = "showError";
+                    return PartialView("_PendingRequests", pendingRequests);
+                }
                 TempData["ErrorMessage"] = "Failed to reject request. Please try again.";
                 return RedirectToAction("Index");
             }
@@ -126,11 +172,22 @@ namespace juveApp.Controllers
             {
                 if (string.IsNullOrWhiteSpace(username))
                 {
+                    if (Request.Headers["HX-Request"] == "true")
+                    {
+                        return Content("<div id='search-results' class='mt-4 text-gray-500'>Please enter a username to search.</div>");
+                    }
                     TempData["ErrorMessage"] = "Please enter a username to search.";
                     return RedirectToAction("Index");
                 }
 
                 var users = await _dashboardService.SearchUsersByUsernameAsync(username);
+
+                // For HTMX requests, return just the search results partial
+                if (Request.Headers["HX-Request"] == "true")
+                {
+                    ViewBag.SearchQuery = username;
+                    return PartialView("_UserSearchResults", users);
+                }
 
                 ViewBag.SearchResults = users;
                 ViewBag.SearchQuery = username;
@@ -148,6 +205,10 @@ namespace juveApp.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error searching users");
+                if (Request.Headers["HX-Request"] == "true")
+                {
+                    return Content("<div id='search-results' class='mt-4 text-red-600'>Failed to search users. Please try again.</div>");
+                }
                 TempData["ErrorMessage"] = "Failed to search users. Please try again.";
                 return RedirectToAction("Index");
             }
@@ -164,6 +225,12 @@ namespace juveApp.Controllers
             {
                 if (string.IsNullOrWhiteSpace(content))
                 {
+                    if (Request.Headers["HX-Request"] == "true")
+                    {
+                        Response.Headers["HX-Trigger"] = "showError";
+                        var headlines = await _dashboardService.GetRecentHeadlinesAsync(5);
+                        return PartialView("_HeadlinesList", headlines);
+                    }
                     TempData["ErrorMessage"] = "Headline content cannot be empty.";
                     return RedirectToAction("Index");
                 }
@@ -171,12 +238,26 @@ namespace juveApp.Controllers
                 int adminUserId = GetCurrentUserId();
                 await _dashboardService.CreateHeadlineAsync(content, adminUserId);
 
+                // For HTMX requests, return updated headlines list
+                if (Request.Headers["HX-Request"] == "true")
+                {
+                    var headlines = await _dashboardService.GetRecentHeadlinesAsync(5);
+                    Response.Headers["HX-Trigger"] = "headlineCreated";
+                    return PartialView("_HeadlinesList", headlines);
+                }
+
                 TempData["SuccessMessage"] = "Headline posted successfully!";
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error creating headline");
+                if (Request.Headers["HX-Request"] == "true")
+                {
+                    Response.Headers["HX-Trigger"] = "showError";
+                    var headlines = await _dashboardService.GetRecentHeadlinesAsync(5);
+                    return PartialView("_HeadlinesList", headlines);
+                }
                 TempData["ErrorMessage"] = "Failed to create headline. Please try again.";
                 return RedirectToAction("Index");
             }
@@ -193,6 +274,14 @@ namespace juveApp.Controllers
             {
                 bool success = await _dashboardService.DeleteHeadlineAsync(id);
 
+                // For HTMX requests, return updated headlines list
+                if (Request.Headers["HX-Request"] == "true")
+                {
+                    var headlines = await _dashboardService.GetRecentHeadlinesAsync(5);
+                    Response.Headers["HX-Trigger"] = success ? "headlineDeleted" : "showError";
+                    return PartialView("_HeadlinesList", headlines);
+                }
+
                 if (success)
                 {
                     TempData["SuccessMessage"] = "Headline deleted successfully!";
@@ -207,6 +296,12 @@ namespace juveApp.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error deleting headline");
+                if (Request.Headers["HX-Request"] == "true")
+                {
+                    var headlines = await _dashboardService.GetRecentHeadlinesAsync(5);
+                    Response.Headers["HX-Trigger"] = "showError";
+                    return PartialView("_HeadlinesList", headlines);
+                }
                 TempData["ErrorMessage"] = "Failed to delete headline. Please try again.";
                 return RedirectToAction("Index");
             }
@@ -223,6 +318,14 @@ namespace juveApp.Controllers
             {
                 bool success = await _dashboardService.UpdateFeedbackStatusAsync(id, "resolved");
 
+                // For HTMX requests, return updated pending feedback list
+                if (Request.Headers["HX-Request"] == "true")
+                {
+                    var pendingFeedback = await _dashboardService.GetPendingFeedbackAsync();
+                    Response.Headers["HX-Trigger"] = success ? "feedbackResolved" : "showError";
+                    return PartialView("_PendingFeedback", pendingFeedback);
+                }
+
                 if (success)
                 {
                     TempData["SuccessMessage"] = "Feedback marked as resolved!";
@@ -237,6 +340,12 @@ namespace juveApp.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error resolving feedback");
+                if (Request.Headers["HX-Request"] == "true")
+                {
+                    var pendingFeedback = await _dashboardService.GetPendingFeedbackAsync();
+                    Response.Headers["HX-Trigger"] = "showError";
+                    return PartialView("_PendingFeedback", pendingFeedback);
+                }
                 TempData["ErrorMessage"] = "Failed to resolve feedback. Please try again.";
                 return RedirectToAction("Index");
             }
