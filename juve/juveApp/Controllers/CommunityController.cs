@@ -10,10 +10,12 @@ namespace juveApp.Controllers
     public class CommunityController : Controller
     {
         private readonly CommunityService _communityService;
+        private readonly ILogger<CommunityController> _logger;
 
-        public CommunityController(CommunityService communityService)
+        public CommunityController(CommunityService communityService, ILogger<CommunityController> logger)
         {
             _communityService = communityService;
+            _logger = logger;
         }
 
         /// <summary>
@@ -32,7 +34,7 @@ namespace juveApp.Controllers
             }
             catch (Exception ex)
             {
-                // Log error
+                _logger.LogError(ex, "Failed to load community page");
                 TempData["ErrorMessage"] = "Failed to load community page";
                 return Redirect("/");
             }
@@ -59,6 +61,7 @@ namespace juveApp.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to load user submissions");
                 TempData["ErrorMessage"] = "Failed to load submissions";
                 return Redirect("/community");
             }
@@ -91,6 +94,7 @@ namespace juveApp.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to load submission form");
                 TempData["ErrorMessage"] = "Failed to load submission form";
                 return Redirect("/community");
             }
@@ -119,11 +123,13 @@ namespace juveApp.Controllers
             }
             catch (InvalidOperationException ex)
             {
+                _logger.LogWarning(ex, "Invalid vacation submission attempt");
                 TempData["ErrorMessage"] = ex.Message;
                 return RedirectToAction("Submit");
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to submit vacation");
                 TempData["ErrorMessage"] = "Failed to submit vacation. Please try again.";
                 return RedirectToAction("Submit");
             }

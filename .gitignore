@@ -2,6 +2,7 @@
 /node_modules
 /juve/juveApp/bin/
 /juve/juveApp/obj/
+/juve/juveApp/appsettings*.json
 
 # Environment
 .env
